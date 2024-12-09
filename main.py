@@ -1,29 +1,89 @@
+import sys
 import os
-from PIL import Image
-from editor.config import Config
-from editor.preprocessor import Preprocessor
+sys.path.append(os.path.join(os.path.dirname(__file__), 'watermarking/ZoDiac'))
+import torch
+import pandas as pd
+from config.config import Config
 from editor.editor import TextBasedImageEditor
+from watermarking.watermark import Watermarker  # Import the Watermarker class
+from PIL import Image
 
-def main(model_name, input_image_path, output_image_path):
+#-----------------------------------Main-----------------------------------#
+def main(config, watermarking_technique, editing_technique, num_iterations=3):
     """
-    Main function to generate an edited image based on the provided input image.
+    Main function for Falcon. This function processes images in several stages: 
+    1. Watermarks the image, saves it.
+    2. Edits the watermarked image using instructions from a CSV, saves it.
+    3. Calculates watermark detection probability, logs it.
+    4. Repeats the process for `num_iterations` times.
 
     Args:
-        config (Config): Configuration object containing the model configurations
-        model_name (str): Name of the model to be used for editing the image
-        input_image_path (str): Path to the input image
-        output_image_path (str): Path to save the output edited image
+        config (Config): Configuration object for the Falcon project.
+        num_iterations (int, optional): Number of iterations to perform on each image. Defaults to 3.
     """
-    example_image = Image.open(input_image_path).convert("RGB")
-    preprocessor = Preprocessor()
-    editor = TextBasedImageEditor(model_name=model_name)
-    processed_image = preprocessor.resize_image(example_image)
-    edited_image = editor.generate_image(input_image=processed_image, instruction="Turn it into an anime.")
-    edited_image.save(output_image_path)
-    edited_image.show()
+    #-----------------------------------Directories-----------------------------------#
+    image_dir = config.get('dirs')['original_image']
+    watermarked_dir = config.get('dirs')['watermarked_image']
+    edited_dir = config.get('dirs')['generated_image_1']
+    instruction_csv = config.get('dirs')['instruction_csv']
+    os.makedirs(watermarked_dir, exist_ok=True)
+    os.makedirs(edited_dir, exist_ok=True)
+
+    #-----------------------------------Load the captions csv-----------------------------------#
+    instructions_df = pd.read_csv(instruction_csv)
+
+
+    detection_probabilities = []
+    model_name = config.get(f'{editing_technique}')['model_id']
+    watermarker = Watermarker(watermarking_technique=watermarking_technique)
+    editor = TextBasedImageEditor(model_name)
+
+    for i in range(1, num_iterations + 1):
+        image_filename = f"images_{i}.png"
+        image_path = os.path.join(image_dir, image_filename)
+
+        if not os.path.exists(image_path):
+            print(f"Warning: {image_filename} not found in {image_dir}")
+            continue
+
+        #------------------------------------------Step 1: Apply watermark to the image------------------------------------------#
+        print(f"Processing {image_filename}...")
+        watermarked_image_path, det_prob = watermarker.apply_watermark(image_path)
+        watermarked_image = Image.open(watermarked_image_path)
+
+        #-------------------------------------------------Step 2: Edit the watermarked image using the TextBasedImageEditor-------------------------------------------------#
+        image_instructions = instructions_df[instructions_df['image_filename'] == image_filename].iloc[0, 1:].values
+        if len(image_instructions) < num_iterations:
+            print(f"Warning: Not enough instructions for {image_filename}. Using available instructions.")
+        
+        # Process the iterations for each image
+        for j in range(min(num_iterations, len(image_instructions))):
+            # Step 3: Edit the watermarked image using the TextBasedImageEditor
+            instruction = image_instructions[j]  # Get the j-th instruction for this iteration
+            edited_image = editor.generate_image(input_image=watermarked_image, instruction=instruction)
+            edited_image_path = os.path.join(edited_dir, f"generated_image_{i}_{j + 1}.png")
+            edited_image.save(edited_image_path)
+
+            # Step 4: Calculate watermark detection probability for the edited image
+            detection_prob = watermarker.calculate_detection_probability(edited_image_path)
+            detection_probabilities.append({
+                'image': image_filename,
+                'iteration': j + 1,
+                'detection_probability': detection_prob
+            })
+
+    # Step 5: Save the detection probabilities to a CSV file
+    probabilities_df = pd.DataFrame(detection_probabilities)
+    probabilities_df.to_csv(os.path.join(image_dir, 'watermark_detection_probabilities.csv'), index=False)
+
+    print("Processing complete. Results saved.")
 
 if __name__ == "__main__":
-    model_name = "pix_to_pix"
-    image_path = "/home/shreyas/Desktop/Shreyas/Projects/Text_Based_Image_Editing/data/Input_Image/image_1.jpg"
-    output_image_path = "/home/shreyas/Desktop/Shreyas/Projects/Text_Based_Image_Editing/data/Output_Image/image_1.jpg"
-    main(model_name, image_path, output_image_path)
+    
+    config_path = "config/config.yaml"
+    config = Config(config_path)
+    watermarking_technique = "ZoDiac"
+    editing_technique = "pix2pix"
+    num_iterations = 5
+    
+    main(config,watermarking_technique,editing_technique,num_iterations)

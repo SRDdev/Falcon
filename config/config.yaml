@@ -2,6 +2,15 @@
 
 device: "cuda:0"
 
+dirs:
+  original_image: "data/input/"
+  watermarked_image: "data/watermarked/"
+  generated_image_1: "data/generated_1/"
+  generated_image_2: "data/generated_2/"
+  generated_image_3: "data/generated_3/"
+  generated_image_4: "data/generated_4/"
+  generated_image_5: "data/generated_5/"
+
 pix_to_pix:
   model_id: "timbrooks/instruct-pix2pix"
   steps: 50
@@ -15,7 +24,7 @@ pix_to_pix:
 
 Zodiac:
   method: 'ZoDiac'
-  save_img: './example/output/'
+  save_img: './data/watermarked/'
   model_id: 'stabilityai/stable-diffusion-2-1-base'
   gen_seed: 0
   empty_prompt: True
