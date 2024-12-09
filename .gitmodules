@@ -1,1 +1,4 @@
 ZoDiac
+[submodule "watermarking/ZoDiac"]
+	path = watermarking/ZoDiac
+	url = https://github.com/zhanglijun95/ZoDiac.git
