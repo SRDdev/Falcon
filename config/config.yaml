@@ -22,6 +22,17 @@ pix_to_pix:
   torch_dtype: "torch.float16"
   safety_checker: None
 
+turbo_edit:
+  sdxl_model: "stabilityai/sdxl-turbo"
+  num_steps_inversion: 5
+  strength: 0.5
+  generator: None
+  seed: 7 
+  ws1: [1.5, 1.5, 1.5, 1.5]
+  ws2: [1, 1, 1, 1]
+  denoising_start: 0.2
+  
+
 Zodiac:
   method: 'ZoDiac'
   save_img: './data/watermarked/'
