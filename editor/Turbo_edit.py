@@ -1,13 +1,47 @@
 """This class contains details about building the Turbo editor."""
 
-from diffusers import AutoPipelineForImage2Image
-from diffusers import DDPMScheduler
-from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl_img2img import retrieve_timesteps, retrieve_latents
-from diffusers.schedulers.scheduling_ddim import DDIMSchedulerOutput
-import torch
-from PIL import Image
 import os
 import yaml
+import torch
+from PIL import Image
+from functools import partial
+from diffusers import AutoPipelineForImage2Image, DDPMScheduler
+from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl_img2img import (
+    retrieve_timesteps,
+    retrieve_latents,
+)
+from diffusers.schedulers.scheduling_ddim import DDIMSchedulerOutput
+from turbo_utils import get_ddpm_inversion_scheduler, create_xts
+from turbo_config import get_config, get_config_name
+
+#-------------------------------------------------------------------------------#
+class Object:
+    pass
+
+##-------------------------------------------------------------------------------#
+args = Object()
+args.images_paths = None
+args.images_folder = None
+args.force_use_cpu = False
+args.folder_name = 'test_measure_time'
+args.config_from_file = 'run_configs/noise_shift_guidance_1_5.yaml'
+args.save_intermediate_results = False
+args.batch_size = None
+args.skip_p_to_p = True
+args.only_p_to_p = False
+args.fp16 = False
+args.prompts_file = 'dataset_measure_time/dataset.json'
+args.images_in_prompts_file = None
+args.seed = 986
+args.time_measure_n = 1
+
+# Ensure the configuration is valid
+assert (
+    args.batch_size is None or not args.save_intermediate_results
+), "save_intermediate_results is not implemented for batch_size > 1"
+
+config = get_config(args)
+#-------------------------------------------------------------------------------#
 
 class TurboEdit:
     """
@@ -40,24 +74,35 @@ class TurboEdit:
                                                                    variant="fp16",
                                                                    safety_checker = None,
                                                                    device=self.device)
-        pipeline = pipeline.to(self.device)
+        self.pipeline = self.pipeline.to(self.device)
         self.pipeline.scheduler = DDPMScheduler.from_pretrained(self.model_config['sdxl_model'],subfolder="scheduler")
         self.generator = torch.Generator().manual_seed(self.model_config['seed'])
 
         self.ws1 = self.model_config['ws1']
         self.ws2 = self.model_config['ws2']
         self.denoising_start = self.model_config['denoising_start']
-        timesteps, num_inference_steps = retrieve_timesteps(
-                        pipeline.scheduler, num_steps_inversion, device, None
+        
+        self.timesteps, self.num_inference_steps = retrieve_timesteps(
+                        self.pipeline.scheduler, self.model_config['num_steps_inversion'], self.device, None
                     )
 
-        timesteps, num_inference_steps = pipeline.get_timesteps(
-                        num_inference_steps=num_inference_steps,
-                        device=device,
-                        denoising_start=denoising_start,
+        self.timesteps, self.num_inference_steps = self.pipeline.get_timesteps(
+                        num_inference_steps=self.num_inference_steps,
+                        device=self.device,
+                        denoising_start=self.denoising_start,
                         strength=0,
                     )
-
+        
+        self.timesteps = self.timesteps.type(torch.int64)
+        self.timesteps = [torch.tensor(t) for t in self.timesteps.tolist()]
+        self.pipeline.__call__ = partial(
+            self.pipeline.__call__,
+            num_inference_steps=self.num_steps_inversion,
+            guidance_scale=0,
+            generator=self.generator,
+            denoising_start=self.denoising_start,
+            strength=0,
+        )
 
     def encode_image(self,image, pipe):
         """
@@ -75,7 +120,7 @@ class TurboEdit:
 
         if isinstance(self.generator,list):
             init_latents = [
-                retrieve_latents(pipe.vae.encode(image[i : i + 1]), generator=generator[i])
+                retrieve_latents(pipe.vae.encode(image[i : i + 1]), generator=self.generator[i])
                 for i in range(1)
             ]
             init_latents = torch.cat(init_latents, dim=0)
@@ -314,4 +359,41 @@ class TurboEdit:
         res = (torch.cat((res_inv[0], res_inf[0]), dim=0),)
         return res
 
-    
+    def run(self,image_path, src_prompt, tgt_prompt, seed, w1, w2):
+        """
+        """
+        x_0_image = Image.open(image_path).convert("RGB").resize((512, 512), Image.LANCZOS)
+        x_0 = self.encode_image(x_0_image, self.pipeline)
+        # x_ts = create_xts(pipeline.scheduler, timesteps, x_0, noise_shift_delta=1, generator=generator)
+        x_ts = create_xts(1, None, 0, self.generator, self.pipeline.scheduler, self.timesteps, x_0, no_add_noise=False)
+        x_ts = [xt.to(dtype=torch.float16) for xt in x_ts]
+        latents = [x_ts[0]]
+        x_ts_c_hat = [None]
+        config.ws1 = [w1] * 4
+        config.ws2 = [w2] * 4
+        self.pipeline.scheduler = get_ddpm_inversion_scheduler(
+                        self.pipeline.scheduler,
+                        config.step_function,
+                        config,
+                        self.timesteps,
+                        config.save_timesteps,
+                        latents,
+                        x_ts,
+                        x_ts_c_hat,
+                        args.save_intermediate_results,
+                        self.pipeline,
+                        x_0,
+                        v1s_images := [],
+                        v2s_images := [],
+                        deltas_images := [],
+                        v1_x0s := [],
+                        v2_x0s := [],
+                        deltas_x0s := [],
+                        "res12",
+                        image_name="im_name",
+                        time_measure_n=args.time_measure_n,
+                    )
+        latent = latents[0].expand(3, -1, -1, -1)
+        prompt = [src_prompt, src_prompt, tgt_prompt]
+        image = self.pipeline.__call__(image=latent, prompt=prompt, eta=1).images
+        return image[2]

@@ -31,7 +31,20 @@ turbo_edit:
   ws1: [1.5, 1.5, 1.5, 1.5]
   ws2: [1, 1, 1, 1]
   denoising_start: 0.2
-  
+  images_paths: null
+  images_folder: null
+  force_use_cpu: false
+  folder_name: "test_measure_time"
+  config_from_file: "run_configs/noise_shift_guidance_1_5.yaml"
+  save_intermediate_results: false
+  batch_size: null
+  skip_p_to_p: true
+  only_p_to_p: false
+  fp16: false
+  prompts_file: "dataset_measure_time/dataset.json"
+  images_in_prompts_file: null
+  seed: 986
+  time_measure_n: 1
 
 Zodiac:
   method: 'ZoDiac'
