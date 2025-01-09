@@ -38,3 +38,14 @@ Zodiac:
   loss_weights: [10.0, 0.1, 1.0, 0.0]
   ssim_threshold: 0.92
   detect_threshold: 0.9
+
+controlnet:
+  model_id: "stabilityai/stable-diffusion-2-1"
+  controlnet_model_id: "lllyasviel/sd-controlnet-canny"
+  steps: 50
+  randomize_seed: True
+  seed: 12345
+  randomize_cfg: True
+  text_cfg_scale: 8.0
+  torch_dtype: "torch.float16"
+  safety_checker: None
