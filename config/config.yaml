@@ -1,0 +1,13 @@
+Editor:
+  pix2pix:
+    device: "cuda"
+    model_id: "timbrooks/instruct-pix2pix"
+    steps: 50
+    randomize_seed: False
+    seed: 42
+    randomize_cfg: False
+    text_cfg_scale: 7.5
+    image_cfg_scale: 1.5
+    safety_checker: None
+
+Watermarker:
