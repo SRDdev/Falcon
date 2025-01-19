@@ -1,2 +1,5 @@
 old_codes/
 env/
+methods/wandb_API.py
+**__pycache__/
+methods/wandb

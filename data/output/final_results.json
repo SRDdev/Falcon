@@ -1,0 +1,18 @@
+{
+  "processed_images": [
+    {
+      "image_id": "111000000002",
+      "original_prompt": "a cute little duck with big eyes",
+      "target_prompt": "a cute little [marmot] with big [mouth]",
+      "watermarked_path": "../data/output\\watermarked\\temp_111000000002_watermarked.jpg",
+      "watermark_messages": [
+        "cc0d2d8c",
+        "17a309f3"
+      ],
+      "edited_path": "../data/output\\edited\\111000000002_edited.jpg",
+      "detection_result": "not_detected",
+      "detected_watermark": null,
+      "bit_accuracy": null
+    }
+  ]
+}

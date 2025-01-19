@@ -11,3 +11,15 @@ Editor:
     safety_checker: None
 
 Watermarker:
+  WAM:
+    device: "cuda"
+    seed: 42
+    epsilon: 1.0
+    min_samples: 500
+    proportion_masked: 0.5
+    exp_dir: "checkpoints"
+    save_dir: "Watermarked/WAM"
+
+WandB:
+  project_name: "Text Based Image Editing"
+  run_name: "pix2pix"
