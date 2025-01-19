@@ -1,13 +1,1403 @@
 {
   "processed_images": [
     {
-      "image_id": "111000000002",
-      "original_prompt": "a cute little duck with big eyes",
-      "target_prompt": "a cute little [marmot] with big [mouth]",
-      "watermarked_path": "../data/output\\watermarked\\temp_111000000002_watermarked.jpg",
+      "image_id": "000000000000",
+      "original_prompt": "a slanted mountain bicycle on the road in front of a building",
+      "target_prompt": "a slanted [rusty] mountain [motorcycle] in front of a [fence]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000000_watermarked.jpg",
       "watermark_messages": [
-        "cc0d2d8c",
-        "17a309f3"
+        "9b7c82fa",
+        "80ce60f1"
+      ]
+    },
+    {
+      "image_id": "000000000001",
+      "original_prompt": "a round cake with orange frosting on a wooden plate",
+      "target_prompt": "a [square] cake with [strawberry frosting] on a [plastic] plate",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000001_watermarked.jpg",
+      "watermark_messages": [
+        "1ea0fe3d",
+        "76590cb4"
+      ]
+    },
+    {
+      "image_id": "000000000002",
+      "original_prompt": "a cat sitting on a wooden chair",
+      "target_prompt": "a [red] [dog] [with flowers in mouth] [standing] on a [metal] chair",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000002_watermarked.jpg",
+      "watermark_messages": [
+        "a4d85d48",
+        "cee5ba98"
+      ]
+    },
+    {
+      "image_id": "000000000003",
+      "original_prompt": "blue light, a black and white cat is playing with a flower",
+      "target_prompt": "blue light, a black and white [dog] is playing with a [yellow] [ball]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000003_watermarked.jpg",
+      "watermark_messages": [
+        "39e073d8",
+        "5fdca6f9"
+      ]
+    },
+    {
+      "image_id": "000000000004",
+      "original_prompt": "a cat sitting next to a mirror",
+      "target_prompt": "a [silver] cat [sculpture] [standing] next to a mirror",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000004_watermarked.jpg",
+      "watermark_messages": [
+        "90701d8c",
+        "d8550fcb"
+      ]
+    },
+    {
+      "image_id": "000000000005",
+      "original_prompt": "an orange cat sitting on top of a fence",
+      "target_prompt": "an [white] cat [and a dog] [standing] on top of a fence",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000005_watermarked.jpg",
+      "watermark_messages": [
+        "d7d30578",
+        "a360b715"
+      ]
+    },
+    {
+      "image_id": "000000000006",
+      "original_prompt": "a cup of coffee with drawing of tulip putted on the wooden table",
+      "target_prompt": "a [yellow] cup of [milk] with drawing of [rose] putted on the wooden table",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000006_watermarked.jpg",
+      "watermark_messages": [
+        "45a4123f",
+        "f41f32d7"
+      ]
+    },
+    {
+      "image_id": "000000000007",
+      "original_prompt": "a german shepherd dog stands on the grass with mouth closed",
+      "target_prompt": "a [white] german shepherd dog [sits] on the grass with [big] mouth [opened]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000007_watermarked.jpg",
+      "watermark_messages": [
+        "3397d92a",
+        "dfa2e3dd"
+      ]
+    },
+    {
+      "image_id": "000000000008",
+      "original_prompt": "a golden retriever holding a tulip sitting on the ground in front of fence",
+      "target_prompt": "a [black] [german shepherd] holding a [rose] [standing] on the ground in front of fence",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000008_watermarked.jpg",
+      "watermark_messages": [
+        "95eea11a",
+        "49f5cf71"
+      ]
+    },
+    {
+      "image_id": "000000000009",
+      "original_prompt": "a dog is laying down on a white background",
+      "target_prompt": "[Painting of] a [lion] laying down on a [blue background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000009_watermarked.jpg",
+      "watermark_messages": [
+        "c61bcdea",
+        "83744ae7"
+      ]
+    },
+    {
+      "image_id": "000000000010",
+      "original_prompt": "photo of a goat and a cat standing on rocks near the ocean",
+      "target_prompt": "photo of a [white] [horse] and a cat [sitting] on rocks near the ocean",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000010_watermarked.jpg",
+      "watermark_messages": [
+        "1e3f453b",
+        "71c349e9"
+      ]
+    },
+    {
+      "image_id": "000000000011",
+      "original_prompt": "a colorful bird standing on a branch",
+      "target_prompt": "a [brown] [owl] standing on a [red] [flower]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000011_watermarked.jpg",
+      "watermark_messages": [
+        "906c5193",
+        "d45dc961"
+      ]
+    },
+    {
+      "image_id": "000000000012",
+      "original_prompt": "meat balls on white ceramics plate",
+      "target_prompt": "[Tuna sushi] on white [metal] plate",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000012_watermarked.jpg",
+      "watermark_messages": [
+        "d77dc24c",
+        "d0d08d66"
+      ]
+    },
+    {
+      "image_id": "000000000013",
+      "original_prompt": "three white dumplings on brown wooden bowl",
+      "target_prompt": "three white [cupcakes] on [black] [metal] bowl",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000013_watermarked.jpg",
+      "watermark_messages": [
+        "83e6f05e",
+        "f363b0b2"
+      ]
+    },
+    {
+      "image_id": "000000000014",
+      "original_prompt": "a man in black shirt with his hands hanging down standing by a house",
+      "target_prompt": "a man in [white] shirt with his hands [up] standing by a house",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000014_watermarked.jpg",
+      "watermark_messages": [
+        "219783a3",
+        "582041c6"
+      ]
+    },
+    {
+      "image_id": "000000000015",
+      "original_prompt": "white plate with fruits on it",
+      "target_prompt": "[Blue] [metal] plate with [vegatables] on it",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000015_watermarked.jpg",
+      "watermark_messages": [
+        "de947489",
+        "48294f90"
+      ]
+    },
+    {
+      "image_id": "000000000016",
+      "original_prompt": "a plate with grilled steak on it",
+      "target_prompt": "a [white] plate with grilled [salmon] [and mushroom] on it",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000016_watermarked.jpg",
+      "watermark_messages": [
+        "7c0b8b0a",
+        "ace2f154"
+      ]
+    },
+    {
+      "image_id": "000000000017",
+      "original_prompt": "photo of a statue in front view",
+      "target_prompt": "photo of a [white] [Teddy Bear] [in side view]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000017_watermarked.jpg",
+      "watermark_messages": [
+        "a0d2c81c",
+        "8144720b"
+      ]
+    },
+    {
+      "image_id": "000000000018",
+      "original_prompt": "the statue of liberty holding a torch",
+      "target_prompt": "the statue of [angel] holding a [red] [flower]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000018_watermarked.jpg",
+      "watermark_messages": [
+        "7dcf9e4a",
+        "ef9b24dc"
+      ]
+    },
+    {
+      "image_id": "000000000019",
+      "original_prompt": "white tiger on brown ground",
+      "target_prompt": "white [cat] on [green grass]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000019_watermarked.jpg",
+      "watermark_messages": [
+        "35ab4956",
+        "dffa4306"
+      ]
+    },
+    {
+      "image_id": "000000000020",
+      "original_prompt": "two birds sitting on a branch",
+      "target_prompt": "two [toy] [cats] [standing] on a branch",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000020_watermarked.jpg",
+      "watermark_messages": [
+        "39288f7f",
+        "9eb97eaa"
+      ]
+    },
+    {
+      "image_id": "000000000021",
+      "original_prompt": "two parrots sitting on a stick, city street background",
+      "target_prompt": "two [metal] [owls] sitting on a stick, [forest] background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000021_watermarked.jpg",
+      "watermark_messages": [
+        "b85b9e19",
+        "c26081e6"
+      ]
+    },
+    {
+      "image_id": "000000000022",
+      "original_prompt": "an orange van with surfboards on top",
+      "target_prompt": "an [pink] [taxi] with [colorful] [flowers] on top",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000022_watermarked.jpg",
+      "watermark_messages": [
+        "c7ba531e",
+        "720857ab"
+      ]
+    },
+    {
+      "image_id": "000000000023",
+      "original_prompt": "a gray horse in the field",
+      "target_prompt": "a [black] [cow] [with white patterns] in the field",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000023_watermarked.jpg",
+      "watermark_messages": [
+        "5e73dc61",
+        "69d71743"
+      ]
+    },
+    {
+      "image_id": "000000000024",
+      "original_prompt": "a white horse running in the sunset",
+      "target_prompt": "a [golden] [dog] [jumping] in the sunset",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000024_watermarked.jpg",
+      "watermark_messages": [
+        "8f4ce6c6",
+        "31fe1c75"
+      ]
+    },
+    {
+      "image_id": "000000000025",
+      "original_prompt": "a woman with blue hair wearing a shirt",
+      "target_prompt": "a woman with [red] hair wearing a [coat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000025_watermarked.jpg",
+      "watermark_messages": [
+        "97c4e637",
+        "33c95e1c"
+      ]
+    },
+    {
+      "image_id": "000000000026",
+      "original_prompt": "a yellow bird with a red beak sitting on a branch",
+      "target_prompt": "a [toy] [cat] with a red [fur] sitting on a branch",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000026_watermarked.jpg",
+      "watermark_messages": [
+        "d1866dbb",
+        "6352daf1"
+      ]
+    },
+    {
+      "image_id": "000000000027",
+      "original_prompt": "a opened eyes cat sitting on wooden floor",
+      "target_prompt": "a [closed eyes] [dog] sitting on [green grass]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000027_watermarked.jpg",
+      "watermark_messages": [
+        "957e2a43",
+        "5c788838"
+      ]
+    },
+    {
+      "image_id": "000000000028",
+      "original_prompt": "white flowers on a tree branch with blue sky background",
+      "target_prompt": "[Painting of] [red] flowers on a tree branch with [white background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000028_watermarked.jpg",
+      "watermark_messages": [
+        "4fa141bb",
+        "44696b06"
+      ]
+    },
+    {
+      "image_id": "000000000029",
+      "original_prompt": "a kitten walking on the grass",
+      "target_prompt": "a [duck] [sitting] on the [floor]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000029_watermarked.jpg",
+      "watermark_messages": [
+        "dc670dfa",
+        "9113966d"
+      ]
+    },
+    {
+      "image_id": "000000000030",
+      "original_prompt": "a stream in a lush forest with rocks",
+      "target_prompt": "a [road] in a lush [city] with [black] rocks",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000030_watermarked.jpg",
+      "watermark_messages": [
+        "d62f1784",
+        "0b05f8b2"
+      ]
+    },
+    {
+      "image_id": "000000000031",
+      "original_prompt": "a red rose in the dark",
+      "target_prompt": "a [blue] [tulip] in the [yellow] [light]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000031_watermarked.jpg",
+      "watermark_messages": [
+        "25568b9a",
+        "60eef632"
+      ]
+    },
+    {
+      "image_id": "000000000032",
+      "original_prompt": "a group of pink flowers hanging from a tree",
+      "target_prompt": "a group of [red] [apples] hanging from a [big] tree",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000032_watermarked.jpg",
+      "watermark_messages": [
+        "23a97ff4",
+        "fa631524"
+      ]
+    },
+    {
+      "image_id": "000000000033",
+      "original_prompt": "a cartoon of a boy walking his dog in autumn",
+      "target_prompt": "a [painting] of a boy walking his [cat] in [winter]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000033_watermarked.jpg",
+      "watermark_messages": [
+        "050b4217",
+        "1568dc33"
+      ]
+    },
+    {
+      "image_id": "000000000034",
+      "original_prompt": "a mother duck and her babies are standing near the water",
+      "target_prompt": "[a sketch painting of] a mother [cat] and her babies are standing near the [forest]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000034_watermarked.jpg",
+      "watermark_messages": [
+        "0ba2e2e5",
+        "215a2bd5"
+      ]
+    },
+    {
+      "image_id": "000000000035",
+      "original_prompt": "photograph, window of the world by jimmy kirk",
+      "target_prompt": "[painting], [yellow] [ball] of the world by jimmy kirk",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000035_watermarked.jpg",
+      "watermark_messages": [
+        "2cc1735a",
+        "c229c3bd"
+      ]
+    },
+    {
+      "image_id": "000000000036",
+      "original_prompt": "smoke",
+      "target_prompt": "[red] [flame] [in the dark]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000036_watermarked.jpg",
+      "watermark_messages": [
+        "6431d2ed",
+        "362d0f22"
+      ]
+    },
+    {
+      "image_id": "000000000037",
+      "original_prompt": "mountain landscape with flowers and withered grass",
+      "target_prompt": "[snow] mountain landscape with flowers and [green] grass",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000037_watermarked.jpg",
+      "watermark_messages": [
+        "513f33e8",
+        "2472d54d"
+      ]
+    },
+    {
+      "image_id": "000000000038",
+      "original_prompt": "a little girl with green eyes and flowers in a blue dress",
+      "target_prompt": "a little girl with [blue] eyes and [yellow] flowers in a blue [coat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000038_watermarked.jpg",
+      "watermark_messages": [
+        "0c504c25",
+        "5825f80b"
+      ]
+    },
+    {
+      "image_id": "000000000039",
+      "original_prompt": "two ducks in the dirt",
+      "target_prompt": "two [cats] [swimming] in the [sea]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000039_watermarked.jpg",
+      "watermark_messages": [
+        "7ac6920f",
+        "0071a275"
+      ]
+    },
+    {
+      "image_id": "000000000040",
+      "original_prompt": "a cat sitting with beads collar",
+      "target_prompt": "a [orange] cat sitting with [cotton] [scarf] [putting hands up]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000040_watermarked.jpg",
+      "watermark_messages": [
+        "4a290295",
+        "1fa9fcca"
+      ]
+    },
+    {
+      "image_id": "000000000041",
+      "original_prompt": "the arctic sky",
+      "target_prompt": "[a spacecraft in] the [blue] arctic sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000041_watermarked.jpg",
+      "watermark_messages": [
+        "16ca56a4",
+        "9d5cb37c"
+      ]
+    },
+    {
+      "image_id": "000000000042",
+      "original_prompt": "a black wolf is standing on rocks in a dark forest",
+      "target_prompt": "a [white] [dog] is standing on rocks in a [bright] forest",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000042_watermarked.jpg",
+      "watermark_messages": [
+        "c4c3850b",
+        "6dc1e5f2"
+      ]
+    },
+    {
+      "image_id": "000000000043",
+      "original_prompt": "a large red cargo ship in the ocean at sunset",
+      "target_prompt": "a [small] [blue] [cruise] ship in the ocean at sunset",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000043_watermarked.jpg",
+      "watermark_messages": [
+        "ed6ad349",
+        "c1d02876"
+      ]
+    },
+    {
+      "image_id": "000000000044",
+      "original_prompt": "a cat sitting in the grass",
+      "target_prompt": "a [yellow] cat [with red scarf] sitting in the [flowers]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000044_watermarked.jpg",
+      "watermark_messages": [
+        "70e67c23",
+        "a4dffa64"
+      ]
+    },
+    {
+      "image_id": "000000000045",
+      "original_prompt": "the christmas illustration of a santa's laughing face",
+      "target_prompt": "the christmas [card] of a santa's [angry] face [with red mustache]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000045_watermarked.jpg",
+      "watermark_messages": [
+        "659d19f4",
+        "387718e5"
+      ]
+    },
+    {
+      "image_id": "000000000046",
+      "original_prompt": "painting of clouds in the sky",
+      "target_prompt": "[photo] of [pink] [stars] in the sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000046_watermarked.jpg",
+      "watermark_messages": [
+        "46e1ba85",
+        "3ce59bf7"
+      ]
+    },
+    {
+      "image_id": "000000000047",
+      "original_prompt": "rusty car by jill kaufman",
+      "target_prompt": "[shiny] [blue] [bus] by jill kaufman",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000047_watermarked.jpg",
+      "watermark_messages": [
+        "ed85c71d",
+        "b6f2e748"
+      ]
+    },
+    {
+      "image_id": "000000000048",
+      "original_prompt": "sunset over a field with clouds and a bright sky",
+      "target_prompt": "sunset over a field with [pink] [stars] and a [dark] sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000048_watermarked.jpg",
+      "watermark_messages": [
+        "297c0aac",
+        "f33ecddb"
+      ]
+    },
+    {
+      "image_id": "000000000049",
+      "original_prompt": "black chair in a conference room",
+      "target_prompt": "[yellow] [metal] chair [with black dots] in a conference room",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000049_watermarked.jpg",
+      "watermark_messages": [
+        "3652086a",
+        "766aeca4"
+      ]
+    },
+    {
+      "image_id": "000000000050",
+      "original_prompt": "a bird standing on clods",
+      "target_prompt": "a [cat] [jumping] on [eggs]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000050_watermarked.jpg",
+      "watermark_messages": [
+        "056c57c4",
+        "75e526fa"
+      ]
+    },
+    {
+      "image_id": "000000000051",
+      "original_prompt": "a painting of colorful flowers in a blue vase",
+      "target_prompt": "a painting of [red] flowers in a [white] vase",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000051_watermarked.jpg",
+      "watermark_messages": [
+        "1e81d95a",
+        "bebc4406"
+      ]
+    },
+    {
+      "image_id": "000000000052",
+      "original_prompt": "a logo of bird shape in a black background",
+      "target_prompt": "a logo of [X] [with pink color] in a [light background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000052_watermarked.jpg",
+      "watermark_messages": [
+        "02331611",
+        "37456dab"
+      ]
+    },
+    {
+      "image_id": "000000000053",
+      "original_prompt": "a fluffy dog with a blue leash sitting in the grass",
+      "target_prompt": "a fluffy [cat] with a blue leash [jumping] on the [ground]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000053_watermarked.jpg",
+      "watermark_messages": [
+        "67c7195b",
+        "2aad10b6"
+      ]
+    },
+    {
+      "image_id": "000000000054",
+      "original_prompt": "a camera and a notebook on a bed",
+      "target_prompt": "a [red] [ball] and a notebook on a [table]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000054_watermarked.jpg",
+      "watermark_messages": [
+        "e5706a89",
+        "05de679e"
+      ]
+    },
+    {
+      "image_id": "000000000055",
+      "original_prompt": "a black dog is looking at the camera in the snow",
+      "target_prompt": "a [white] [tiger] is looking at the camera in the [rain]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000055_watermarked.jpg",
+      "watermark_messages": [
+        "377d4779",
+        "0296c20d"
+      ]
+    },
+    {
+      "image_id": "000000000056",
+      "original_prompt": "a meerkat puppy wrapped in a blue towel",
+      "target_prompt": "a [lion] puppy [with black fur] wrapped in a blue [coat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000056_watermarked.jpg",
+      "watermark_messages": [
+        "e8be436a",
+        "d9761418"
+      ]
+    },
+    {
+      "image_id": "000000000057",
+      "original_prompt": "an owl sitting on a branch",
+      "target_prompt": "[a photo of] an owl [jumping] on a [rock]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000057_watermarked.jpg",
+      "watermark_messages": [
+        "86fd101b",
+        "ab1c3c81"
+      ]
+    },
+    {
+      "image_id": "000000000058",
+      "original_prompt": "purple tulips in vase",
+      "target_prompt": "[yellow] [roses] in [blue] vase",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000058_watermarked.jpg",
+      "watermark_messages": [
+        "9627ca42",
+        "655176f1"
+      ]
+    },
+    {
+      "image_id": "000000000059",
+      "original_prompt": "a cartoon goat",
+      "target_prompt": "a cartoon [cat] [face backward] [is jumping]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000059_watermarked.jpg",
+      "watermark_messages": [
+        "6f2e6aef",
+        "e52cf715"
+      ]
+    },
+    {
+      "image_id": "000000000060",
+      "original_prompt": "a yellow apple sitting on top of a wooden table",
+      "target_prompt": "a [red] [pear] sitting on top of a [glass] table",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000060_watermarked.jpg",
+      "watermark_messages": [
+        "8154c3da",
+        "b46894ee"
+      ]
+    },
+    {
+      "image_id": "000000000061",
+      "original_prompt": "a mid autumn road lined with trees and leaves",
+      "target_prompt": "a mid [winter] road [with rocks] lined with trees and [flowers]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000061_watermarked.jpg",
+      "watermark_messages": [
+        "41f377b9",
+        "908edf63"
+      ]
+    },
+    {
+      "image_id": "000000000062",
+      "original_prompt": "a rabbit is sitting in a pile of colorful eggs",
+      "target_prompt": "a [cat] is [sleeping] in a pile of colorful [stones]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000062_watermarked.jpg",
+      "watermark_messages": [
+        "c5249bb9",
+        "00d28000"
+      ]
+    },
+    {
+      "image_id": "000000000063",
+      "original_prompt": "a vase with some blooming flowers in it",
+      "target_prompt": "a [white] vase with some [wilted] [vegatables] in it",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000063_watermarked.jpg",
+      "watermark_messages": [
+        "273578ca",
+        "929f3ca5"
+      ]
+    },
+    {
+      "image_id": "000000000064",
+      "original_prompt": "a woman in front of a glowing yellow light",
+      "target_prompt": "a woman [riding a lion] in front of a glowing [red] [flame]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000064_watermarked.jpg",
+      "watermark_messages": [
+        "c8b34287",
+        "7ba45069"
+      ]
+    },
+    {
+      "image_id": "000000000065",
+      "original_prompt": "a bird is sitting on a branch with moss",
+      "target_prompt": "a [blue] bird is [standing] on a [stone]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000065_watermarked.jpg",
+      "watermark_messages": [
+        "1c2bdaf3",
+        "70fdc5f6"
+      ]
+    },
+    {
+      "image_id": "000000000066",
+      "original_prompt": "a dalmatian dog laying on the ground",
+      "target_prompt": "[painting of] a [german shepherd] [standing] on the ground",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000066_watermarked.jpg",
+      "watermark_messages": [
+        "9a491abc",
+        "1f9e2c77"
+      ]
+    },
+    {
+      "image_id": "000000000067",
+      "original_prompt": "a woman in a jacket standing in the rain",
+      "target_prompt": "a woman in a [white] [shirt] [crying] in the rain",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000067_watermarked.jpg",
+      "watermark_messages": [
+        "d4121d76",
+        "2e9467da"
+      ]
+    },
+    {
+      "image_id": "000000000068",
+      "original_prompt": "photo of horses running in the woods",
+      "target_prompt": "[painting] of [white] [unicorns] [standing] in the woods",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000068_watermarked.jpg",
+      "watermark_messages": [
+        "ac836eb5",
+        "0bfb466c"
+      ]
+    },
+    {
+      "image_id": "000000000069",
+      "original_prompt": "sea and house",
+      "target_prompt": "[forest] [with snow] and [bus]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000069_watermarked.jpg",
+      "watermark_messages": [
+        "093f89c9",
+        "8300bd54"
+      ]
+    },
+    {
+      "image_id": "000000000070",
+      "original_prompt": "the city of dresden, germany, europe",
+      "target_prompt": "[a sunny day of] the [park] of dresden, germany, europe",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000070_watermarked.jpg",
+      "watermark_messages": [
+        "963e4e97",
+        "5e19ddc0"
+      ]
+    },
+    {
+      "image_id": "000000000071",
+      "original_prompt": "an apple with two faces on it in a white background",
+      "target_prompt": "an [orange] with two [hands] on it in a [dark background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000071_watermarked.jpg",
+      "watermark_messages": [
+        "625b3c40",
+        "7924fe6a"
+      ]
+    },
+    {
+      "image_id": "000000000072",
+      "original_prompt": "colorful cups",
+      "target_prompt": "[wooden] [green] [vases]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000072_watermarked.jpg",
+      "watermark_messages": [
+        "8068c6c3",
+        "1961aac6"
+      ]
+    },
+    {
+      "image_id": "000000000073",
+      "original_prompt": "a spring field with trees and a blue sky",
+      "target_prompt": "a [autumn] field with [buildings] and a [pink] sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000073_watermarked.jpg",
+      "watermark_messages": [
+        "06eedb7b",
+        "a24eb7ee"
+      ]
+    },
+    {
+      "image_id": "000000000074",
+      "original_prompt": "a mountain is covered in clouds and snow",
+      "target_prompt": "a [building] is covered in [leaves] and snow",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000074_watermarked.jpg",
+      "watermark_messages": [
+        "c3428dc0",
+        "d1eac51c"
+      ]
+    },
+    {
+      "image_id": "000000000075",
+      "original_prompt": "a woman with flowers around her face",
+      "target_prompt": "a woman with [cats] [and dogs] [playing] around her face",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000075_watermarked.jpg",
+      "watermark_messages": [
+        "0821cb47",
+        "e9de3400"
+      ]
+    },
+    {
+      "image_id": "000000000076",
+      "original_prompt": "a painting of a cup with a smoke coming out of it",
+      "target_prompt": "a painting of a [golden] [vase] with a [flower] coming out of it",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000076_watermarked.jpg",
+      "watermark_messages": [
+        "219d9822",
+        "99b7b7b6"
+      ]
+    },
+    {
+      "image_id": "000000000077",
+      "original_prompt": "a painting of a cabin in the snow with mountains in the background",
+      "target_prompt": "a painting of a [car] in the snow with [colorful] [buildings] in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000077_watermarked.jpg",
+      "watermark_messages": [
+        "a1e0d7c9",
+        "36a70e46"
+      ]
+    },
+    {
+      "image_id": "000000000078",
+      "original_prompt": "ocean with clouds in the sky",
+      "target_prompt": "ocean with [stars] [shining] in the [pink] sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000078_watermarked.jpg",
+      "watermark_messages": [
+        "e4c9b109",
+        "36b064f7"
+      ]
+    },
+    {
+      "image_id": "000000000079",
+      "original_prompt": "a man walking in a town with mountains in the background",
+      "target_prompt": "a man walking in a [city] with [buildings] in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000079_watermarked.jpg",
+      "watermark_messages": [
+        "78345fda",
+        "da300ad3"
+      ]
+    },
+    {
+      "image_id": "000000000080",
+      "original_prompt": "a cat is shown in a low polygonal style",
+      "target_prompt": "a [fox] is shown [smiling] in a [high polygonal style]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000080_watermarked.jpg",
+      "watermark_messages": [
+        "da52d4cd",
+        "18197609"
+      ]
+    },
+    {
+      "image_id": "000000000081",
+      "original_prompt": "mushrooms on a branch in the forest",
+      "target_prompt": "[flowers] on a [rock] in the forest",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000081_watermarked.jpg",
+      "watermark_messages": [
+        "8bc08410",
+        "15e8f350"
+      ]
+    },
+    {
+      "image_id": "000000000082",
+      "original_prompt": "a cute dog holding a red heart",
+      "target_prompt": "a cute [cat] holding a [pink] [ball]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000082_watermarked.jpg",
+      "watermark_messages": [
+        "39efe503",
+        "35a461ef"
+      ]
+    },
+    {
+      "image_id": "000000000083",
+      "original_prompt": "a water droplet hangs from a string of lights",
+      "target_prompt": "a [ink] droplet hangs from a string of [flashing] [red] lights",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000083_watermarked.jpg",
+      "watermark_messages": [
+        "e8f7e799",
+        "a2201562"
+      ]
+    },
+    {
+      "image_id": "000000000084",
+      "original_prompt": "two red and white toy gnomes are sitting on a snow covered surface",
+      "target_prompt": "two [blue and green] toy [cats] are [standing] on a snow covered surface",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000084_watermarked.jpg",
+      "watermark_messages": [
+        "267a4f67",
+        "288cd08c"
+      ]
+    },
+    {
+      "image_id": "000000000085",
+      "original_prompt": "wolf howling at the moon with a outline of a wolf",
+      "target_prompt": "[dog] howling at the [sun] with a outline of a [person]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000085_watermarked.jpg",
+      "watermark_messages": [
+        "ec74df35",
+        "61bcffec"
+      ]
+    },
+    {
+      "image_id": "000000000086",
+      "original_prompt": "the almond tree is blooming in the spring",
+      "target_prompt": "the [violet] [cherry] tree is blooming in the [winter]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000086_watermarked.jpg",
+      "watermark_messages": [
+        "2ea99179",
+        "3d8f6602"
+      ]
+    },
+    {
+      "image_id": "000000000087",
+      "original_prompt": "a jockey rides a horse on a grassy field",
+      "target_prompt": "a [girl] rides a [dog] on a [snow] field",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000087_watermarked.jpg",
+      "watermark_messages": [
+        "80656099",
+        "57fdc90b"
+      ]
+    },
+    {
+      "image_id": "000000000088",
+      "original_prompt": "a plate with rice, lemon slices and fish",
+      "target_prompt": "a plate with rice, [apple] slices and [steak]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000088_watermarked.jpg",
+      "watermark_messages": [
+        "30ec0c15",
+        "b633ede6"
+      ]
+    },
+    {
+      "image_id": "000000000089",
+      "original_prompt": "two red berries on a tree branch with a blue sky in the background",
+      "target_prompt": "two [purple] [apples] on a tree branch with a [pink] sky in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000089_watermarked.jpg",
+      "watermark_messages": [
+        "2879cafe",
+        "45038412"
+      ]
+    },
+    {
+      "image_id": "000000000090",
+      "original_prompt": "a drawing of a woman with a towel on her head",
+      "target_prompt": "a drawing of a woman with a [colorfull] [hat] on her head [and a dress on her body]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000090_watermarked.jpg",
+      "watermark_messages": [
+        "c9c26364",
+        "a05c6735"
+      ]
+    },
+    {
+      "image_id": "000000000091",
+      "original_prompt": "a girl sitting at a table with pizza and drinks",
+      "target_prompt": "a girl [with flowers] sitting at a table with [noodles] and [cakes]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000091_watermarked.jpg",
+      "watermark_messages": [
+        "9abb7ac5",
+        "b5645586"
+      ]
+    },
+    {
+      "image_id": "000000000092",
+      "original_prompt": "lilas and book on wooden surface",
+      "target_prompt": "lilas and [cakes] on [black] [glass] surface",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000092_watermarked.jpg",
+      "watermark_messages": [
+        "73c03b15",
+        "c58b4f06"
+      ]
+    },
+    {
+      "image_id": "000000000093",
+      "original_prompt": "a collie dog is sitting on a bed",
+      "target_prompt": "a [garfield cat] is [sleeping] on a [sofa]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000093_watermarked.jpg",
+      "watermark_messages": [
+        "688c5e63",
+        "b507407a"
+      ]
+    },
+    {
+      "image_id": "000000000094",
+      "original_prompt": "a cat is sitting on a red blanket",
+      "target_prompt": "a cat is [sleeping] on a [blue] [sweater]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000094_watermarked.jpg",
+      "watermark_messages": [
+        "bb27df26",
+        "dae85a50"
+      ]
+    },
+    {
+      "image_id": "000000000095",
+      "original_prompt": "a painting of a fairy with green wings holding a glowing jar",
+      "target_prompt": "a painting of a fairy with [purple] wings holding a [white] [crystal ball]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000095_watermarked.jpg",
+      "watermark_messages": [
+        "a911c43c",
+        "1c4dbbf4"
+      ]
+    },
+    {
+      "image_id": "000000000096",
+      "original_prompt": "a white and black photo of bride and groom embrace in the woods",
+      "target_prompt": "a [colorful and beautiful] photo of bride and groom embrace in the [church]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000096_watermarked.jpg",
+      "watermark_messages": [
+        "f826b413",
+        "0c6df858"
+      ]
+    },
+    {
+      "image_id": "000000000097",
+      "original_prompt": "a vase of colorful flowers on a wooden table",
+      "target_prompt": "a [metal] vase of colorful [rose] flowers on a [white] table",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000097_watermarked.jpg",
+      "watermark_messages": [
+        "11c0e5b7",
+        "a16d70f0"
+      ]
+    },
+    {
+      "image_id": "000000000098",
+      "original_prompt": "a light bulb hanging from a wire with sky in the background",
+      "target_prompt": "a [cat] hanging from a wire with [grass] in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000098_watermarked.jpg",
+      "watermark_messages": [
+        "8ea614e4",
+        "fd885302"
+      ]
+    },
+    {
+      "image_id": "000000000099",
+      "original_prompt": "a painting of a woman holding a pink flower",
+      "target_prompt": "a painting of a woman [with pink hair] holding a [teddy bear]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000099_watermarked.jpg",
+      "watermark_messages": [
+        "6fe70312",
+        "98a8991a"
+      ]
+    },
+    {
+      "image_id": "000000000100",
+      "original_prompt": "a woman in black holding an umbrella walks through a field",
+      "target_prompt": "a woman in [red] holding an umbrella [runs] through a [forest]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000100_watermarked.jpg",
+      "watermark_messages": [
+        "62df3282",
+        "bb0df17f"
+      ]
+    },
+    {
+      "image_id": "000000000101",
+      "original_prompt": "poppies",
+      "target_prompt": "[blue] poppies [and bees] [in winter]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000101_watermarked.jpg",
+      "watermark_messages": [
+        "a6e7eeca",
+        "585dcf69"
+      ]
+    },
+    {
+      "image_id": "000000000102",
+      "original_prompt": "a rose on the rail",
+      "target_prompt": "a [white] [tulip] on the rail",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000102_watermarked.jpg",
+      "watermark_messages": [
+        "c91c694c",
+        "563fbf20"
+      ]
+    },
+    {
+      "image_id": "000000000103",
+      "original_prompt": "an abstract painting of waves and water",
+      "target_prompt": "an [digital painting] of [stars] and [moon]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000103_watermarked.jpg",
+      "watermark_messages": [
+        "c4da133e",
+        "7e9ac854"
+      ]
+    },
+    {
+      "image_id": "000000000104",
+      "original_prompt": "a woman with flowers in her hair",
+      "target_prompt": "a woman with [white] [snakes] in her hair",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000104_watermarked.jpg",
+      "watermark_messages": [
+        "8e23213f",
+        "9be3953d"
+      ]
+    },
+    {
+      "image_id": "000000000105",
+      "original_prompt": "cat with yellow eyes",
+      "target_prompt": "[fat] [orange] cat with [green eyes]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000105_watermarked.jpg",
+      "watermark_messages": [
+        "d98555af",
+        "e2c9ef57"
+      ]
+    },
+    {
+      "image_id": "000000000106",
+      "original_prompt": "a red mushroom with white spots on it is sitting on the ground",
+      "target_prompt": "a [blue] [umbrella] with [rainbow] spots on it is sitting on the ground",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000106_watermarked.jpg",
+      "watermark_messages": [
+        "c9401805",
+        "d3247898"
+      ]
+    },
+    {
+      "image_id": "000000000107",
+      "original_prompt": "a bird on the branch",
+      "target_prompt": "a [red] [wodden] [duck] on the branch",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000107_watermarked.jpg",
+      "watermark_messages": [
+        "abeec208",
+        "632f3cce"
+      ]
+    },
+    {
+      "image_id": "000000000108",
+      "original_prompt": "a woman sitting in a living room",
+      "target_prompt": "[watercolor painting of] a [boy] [standing] in a living room",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000108_watermarked.jpg",
+      "watermark_messages": [
+        "8e6ec4f1",
+        "d2b938d9"
+      ]
+    },
+    {
+      "image_id": "000000000109",
+      "original_prompt": "a farm with a thatched roof and trees in the background",
+      "target_prompt": "a [school] with a [red] [tile] roof and trees in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000109_watermarked.jpg",
+      "watermark_messages": [
+        "31069e85",
+        "c1fe4029"
+      ]
+    },
+    {
+      "image_id": "000000000110",
+      "original_prompt": "a young woman is holding a dog",
+      "target_prompt": "a [old woman] is holding a [white] [cat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000110_watermarked.jpg",
+      "watermark_messages": [
+        "71d0b399",
+        "9609d27d"
+      ]
+    },
+    {
+      "image_id": "000000000111",
+      "original_prompt": "a cat with green eyes sitting on the ground",
+      "target_prompt": "a [dog] with [blue eyes] [standing] on the ground",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000111_watermarked.jpg",
+      "watermark_messages": [
+        "8c53dab8",
+        "e9fa8c70"
+      ]
+    },
+    {
+      "image_id": "000000000112",
+      "original_prompt": "a group of rubber ducks are lined up in a canal",
+      "target_prompt": "a group of [pink] [plush ducks] are [swimming] in a canal",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000112_watermarked.jpg",
+      "watermark_messages": [
+        "2a40e9c2",
+        "25b290e3"
+      ]
+    },
+    {
+      "image_id": "000000000113",
+      "original_prompt": "dogs running in the grass",
+      "target_prompt": "[rabbits] [holding apples] in the grass",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000113_watermarked.jpg",
+      "watermark_messages": [
+        "42fade71",
+        "39cb2a64"
+      ]
+    },
+    {
+      "image_id": "000000000114",
+      "original_prompt": "a photo of a man and woman sitting on the ground",
+      "target_prompt": "a [painting] of a man and woman [playing] on the ground",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000114_watermarked.jpg",
+      "watermark_messages": [
+        "6d08428b",
+        "d761295f"
+      ]
+    },
+    {
+      "image_id": "000000000115",
+      "original_prompt": "two ducks standing next to each other",
+      "target_prompt": "two [colorful] [birds] [flying] next to each other",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000115_watermarked.jpg",
+      "watermark_messages": [
+        "e636602e",
+        "afec7604"
+      ]
+    },
+    {
+      "image_id": "000000000116",
+      "original_prompt": "easter eggs in a teacup",
+      "target_prompt": "[colorful] [dinosaur eggs] in a [glass]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000116_watermarked.jpg",
+      "watermark_messages": [
+        "46c8e0ce",
+        "4ba196bb"
+      ]
+    },
+    {
+      "image_id": "000000000117",
+      "original_prompt": "a pink flower with yellow center in the middle",
+      "target_prompt": "a [blue] flower with [red] [bee] center in the middle",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000117_watermarked.jpg",
+      "watermark_messages": [
+        "1e4a284a",
+        "ff6ca532"
+      ]
+    },
+    {
+      "image_id": "000000000118",
+      "original_prompt": "a small bird is sitting on a branch in a field",
+      "target_prompt": "a [big] [cat] is sitting on a branch in a [forest]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000118_watermarked.jpg",
+      "watermark_messages": [
+        "70529006",
+        "4c5c3a6e"
+      ]
+    },
+    {
+      "image_id": "000000000119",
+      "original_prompt": "a woman in red sitting on a chair with castle in the background",
+      "target_prompt": "a woman in [white] [crying] on a chair with [ghost] in the background",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000119_watermarked.jpg",
+      "watermark_messages": [
+        "6217a0fb",
+        "bd14c25e"
+      ]
+    },
+    {
+      "image_id": "000000000120",
+      "original_prompt": "woman with brown hair",
+      "target_prompt": "woman with [pink] [straight] hair [and blue eyes]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000120_watermarked.jpg",
+      "watermark_messages": [
+        "a24e5a37",
+        "7f7d61c3"
+      ]
+    },
+    {
+      "image_id": "000000000121",
+      "original_prompt": "watercolor of leaves on a branch",
+      "target_prompt": "[oilpainting] of [pink] [roses] on a branch",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000121_watermarked.jpg",
+      "watermark_messages": [
+        "911b1282",
+        "4a578541"
+      ]
+    },
+    {
+      "image_id": "000000000122",
+      "original_prompt": "a view of the mountains covered in snow",
+      "target_prompt": "a view of the mountains covered in [red] [berries and leaves]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000122_watermarked.jpg",
+      "watermark_messages": [
+        "04f0d5ab",
+        "8505d99f"
+      ]
+    },
+    {
+      "image_id": "000000000123",
+      "original_prompt": "gold buddha statue in the temple",
+      "target_prompt": "[red] [stone] buddha statue [with diamonds] in the temple",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000123_watermarked.jpg",
+      "watermark_messages": [
+        "b3055727",
+        "12104481"
+      ]
+    },
+    {
+      "image_id": "000000000124",
+      "original_prompt": "the galaxy over the durdle door",
+      "target_prompt": "the [pink] [sunset] [and rainbow] over the durdle door",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000124_watermarked.jpg",
+      "watermark_messages": [
+        "f8ec029f",
+        "1ef69c09"
+      ]
+    },
+    {
+      "image_id": "000000000125",
+      "original_prompt": "a close up of a purple flower on a black background",
+      "target_prompt": "a close up of a [blue] flower [lego] on a [light background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000125_watermarked.jpg",
+      "watermark_messages": [
+        "2941ee18",
+        "b201bde6"
+      ]
+    },
+    {
+      "image_id": "000000000126",
+      "original_prompt": "a kitchen",
+      "target_prompt": "[an oil painting of] a [cat in] kitchen",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000126_watermarked.jpg",
+      "watermark_messages": [
+        "88044254",
+        "79bb189b"
+      ]
+    },
+    {
+      "image_id": "000000000127",
+      "original_prompt": "a boat is docked on a lake in the heavy fog",
+      "target_prompt": "a [white] boat [with boxes] is docked on a lake in the [sunny day]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000127_watermarked.jpg",
+      "watermark_messages": [
+        "a753ee37",
+        "a7bfa1c3"
+      ]
+    },
+    {
+      "image_id": "000000000128",
+      "original_prompt": "cartoon painting of a fox sleeping with flowers with a gray background",
+      "target_prompt": "[watercolor] painting of a [cat] sleeping with [pink] flowers with a [light background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000128_watermarked.jpg",
+      "watermark_messages": [
+        "80647e20",
+        "de745dbe"
+      ]
+    },
+    {
+      "image_id": "000000000129",
+      "original_prompt": "a woman with gold makeup",
+      "target_prompt": "a woman with [blue makeup] [and a hat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000129_watermarked.jpg",
+      "watermark_messages": [
+        "b88a91ae",
+        "019bcc50"
+      ]
+    },
+    {
+      "image_id": "000000000130",
+      "original_prompt": "a toy figure of naruto standing on a table",
+      "target_prompt": "a toy figure of [cat] [sitting] on a [rock]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000130_watermarked.jpg",
+      "watermark_messages": [
+        "4df21189",
+        "bb638487"
+      ]
+    },
+    {
+      "image_id": "000000000131",
+      "original_prompt": "a swan swimming in a pond with its head out the water",
+      "target_prompt": "a swan swimming in a [pool] with its [wings] [under] the water",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000131_watermarked.jpg",
+      "watermark_messages": [
+        "715c9bfb",
+        "8e894e7a"
+      ]
+    },
+    {
+      "image_id": "000000000132",
+      "original_prompt": "a little girl wearing sunglasses and a gray shirt leaning against a wall",
+      "target_prompt": "a little girl wearing [hat] and a gray [dress] leaning against a wall",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000132_watermarked.jpg",
+      "watermark_messages": [
+        "ee37a1eb",
+        "3d4b3755"
+      ]
+    },
+    {
+      "image_id": "000000000133",
+      "original_prompt": "a lion in the sky with a blue background",
+      "target_prompt": "a [white] [dog] in the sky with a [red background]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000133_watermarked.jpg",
+      "watermark_messages": [
+        "1098bbf3",
+        "d351b0bc"
+      ]
+    },
+    {
+      "image_id": "000000000134",
+      "original_prompt": "a black and white bird flying in the blue sky",
+      "target_prompt": "a [red and white] [chicken] flying in the [pink] sky",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000134_watermarked.jpg",
+      "watermark_messages": [
+        "08bac6cd",
+        "acc9528f"
+      ]
+    },
+    {
+      "image_id": "000000000135",
+      "original_prompt": "the two people are standing on rocks with a fish",
+      "target_prompt": "the two [old] people are [sitting] on [boat] with a fish",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000135_watermarked.jpg",
+      "watermark_messages": [
+        "750d0dc7",
+        "86ec91b4"
+      ]
+    },
+    {
+      "image_id": "000000000136",
+      "original_prompt": "a yellow bird sitting on a branch",
+      "target_prompt": "a [blue] [parrot] sitting on a [green] branch",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000136_watermarked.jpg",
+      "watermark_messages": [
+        "e93d4f70",
+        "83b481e2"
+      ]
+    },
+    {
+      "image_id": "000000000137",
+      "original_prompt": "a golden pagoda in the snow",
+      "target_prompt": "a [red] pagoda in the [heavy] [rain]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000137_watermarked.jpg",
+      "watermark_messages": [
+        "251d4a8e",
+        "2df7b4a1"
+      ]
+    },
+    {
+      "image_id": "000000000138",
+      "original_prompt": "a cat",
+      "target_prompt": "a [white] cat [with a hat]",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000138_watermarked.jpg",
+      "watermark_messages": [
+        "4482eeeb",
+        "1e2bdd9d"
+      ]
+    },
+    {
+      "image_id": "000000000139",
+      "original_prompt": "a duck standing on a rock near water",
+      "target_prompt": "a [chicken] [sitting] on a [board] near water",
+      "watermarked_path": "../data/output\\watermarked\\temp_000000000139_watermarked.jpg",
+      "watermark_messages": [
+        "3ad76b0b",
+        "bc57dd5c"
       ]
     }
   ]

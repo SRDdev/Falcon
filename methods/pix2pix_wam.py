@@ -172,41 +172,40 @@ def watermark_images(wam, ds, output_base_dir):
     watermark_results = []
     
     for idx, item in enumerate(tqdm((ds["V1"]), desc="Watermarking")):
-        if idx == 2:
-            image = item["image"]
-            image_id = item["id"]
-            
-            # Save temporary image
-            temp_image_path = os.path.join(output_base_dir, f"temp_{image_id}.jpg")
-            image.save(temp_image_path)
-            
-            # Add watermark
-            watermarked_path = os.path.join(watermarked_dir, f"{image_id}.jpg")
-            watermarked_path, watermarks = wam.add_random_watermarks(
-                temp_image_path,
-                watermarked_dir,
-                num_watermarks=2
-            )
-            
-            # Log initial image and watermarked image to wandb
-            wandb.log({
-                "initial_image": wandb.Image(image, caption=f"Initial Image (ID: {image_id})"),
-                "watermarked_image": wandb.Image(watermarked_path, caption=f"Watermarked Image (ID: {image_id})"),
-                "initial_prompt": item["source_prompt"],
-                "watermark_messages": watermarks,
-            })
-            
-            # Store results
-            watermark_results.append({
-                "image_id": image_id,
-                "original_prompt": item["source_prompt"],
-                "target_prompt": item["target_prompt"],
-                "watermarked_path": watermarked_path,
-                "watermark_messages": watermarks
-            })
-            
-            # Clean up
-            os.remove(temp_image_path)
+        image = item["image"]
+        image_id = item["id"]
+        
+        # Save temporary image
+        temp_image_path = os.path.join(output_base_dir, f"temp_{image_id}.jpg")
+        image.save(temp_image_path)
+        
+        # Add watermark
+        watermarked_path = os.path.join(watermarked_dir, f"{image_id}.jpg")
+        watermarked_path, watermarks = wam.add_random_watermarks(
+            temp_image_path,
+            watermarked_dir,
+            num_watermarks=2
+        )
+        
+        # Log initial image and watermarked image to wandb
+        wandb.log({
+            "initial_image": wandb.Image(image, caption=f"Initial Image (ID: {image_id})"),
+            "watermarked_image": wandb.Image(watermarked_path, caption=f"Watermarked Image (ID: {image_id})"),
+            "initial_prompt": item["source_prompt"],
+            "watermark_messages": watermarks,
+        })
+        
+        # Store results
+        watermark_results.append({
+            "image_id": image_id,
+            "original_prompt": item["source_prompt"],
+            "target_prompt": item["target_prompt"],
+            "watermarked_path": watermarked_path,
+            "watermark_messages": watermarks
+        })
+        
+        # Clean up
+        os.remove(temp_image_path)
             
     return watermark_results
 
@@ -300,7 +299,7 @@ if __name__ == "__main__":
     model = Pix2Pix(config_pix2pix)
     
     # Load dataset
-    ds = load_dataset("UB-CVML-Group/PIE_Bench_pp", "1_change_object_80")
+    ds = load_dataset("UB-CVML-Group/PIE_Bench_pp", "0_random_140")
     
     # Process pipeline
     print("-"*100)

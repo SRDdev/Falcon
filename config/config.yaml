@@ -22,4 +22,4 @@ Watermarker:
 
 WandB:
   project_name: "Text Based Image Editing"
-  run_name: "pix2pix"
+  run_name: "0_random_140"

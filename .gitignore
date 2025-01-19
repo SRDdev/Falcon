@@ -3,3 +3,5 @@ env/
 methods/wandb_API.py
 **__pycache__/
 methods/wandb
+data/output/watermarked/
+data/output/edited/
