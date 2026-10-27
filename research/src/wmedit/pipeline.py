@@ -53,7 +53,8 @@ class Experiment:
         d = self.cfg["dataset"]
         self.samples, self.images, self.masks = load_pie_bench(
             RESEARCH_ROOT / "datasets" / "hf_cache", d.get("subsets"), d.get("per_subset"),
-            d.get("max_images"), self.rounds, self.seed, d.get("skip_per_subset", 0))
+            d.get("max_images"), self.rounds, self.seed, d.get("skip_per_subset", 0),
+            d.get("followup_order"))
         if d.get("source") == "generated":  # generated-image track: originals are clean SD-1.5 generations
             self._generate_originals()
         write_prompt_manifest(self.samples, self.root / "prompts.jsonl")

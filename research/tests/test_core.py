@@ -48,6 +48,15 @@ def test_plan_deterministic_and_chained():
         assert b.source_caption == a.target_caption  # round r input caption = round r-1 output caption
 
 
+def test_local_followups_keep_round1_and_default():
+    default = build_plan("x", "src", "tgt", "do it", "change_color", 4, 42)
+    local = build_plan("x", "src", "tgt", "do it", "change_color", 4, 42, ["local_add"])
+    assert local[0] == default[0]  # round 1 identical, so it matches stage 2
+    assert [s.category for s in local[1:]] == ["local_add"] * 3
+    assert len({s.instruction for s in local[1:]}) == 3  # no repeated local edit within a chain
+    assert build_plan("x", "src", "tgt", "do it", "change_color", 4, 42, None) == default
+
+
 def test_stable_seed():
     assert stable_seed("a", 1) == stable_seed("a", 1) != stable_seed("a", 2)
 

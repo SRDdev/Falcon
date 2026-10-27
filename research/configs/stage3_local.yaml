@@ -1,0 +1,23 @@
+# Stage 3 (sajal/local-chains): same 90 images, round-1 edit and seeds as stage 2, but rounds 2-4 are
+# LOCAL insertions instead of global attribute/background/style edits. Compare with stage2 flux2klein baseline.
+name: stage3_local
+seed: 42
+output_dir: experiments
+dataset:
+  name: pie_bench_pp
+  subsets: null
+  per_subset: 10
+  max_images: 90
+  rounds: 4
+  followup_order: [local_add]   # rounds 2,3,4 all draw from FOLLOWUP_POOL["local_add"]
+watermarks:
+  - {name: none}       # FPR control track
+  - {name: wam}
+  - {name: trustmark}  # dwtdct dropped: already lost on most round-1 edits in stage 2
+editors:
+  - {name: flux2klein, steps: 4, guidance: 1.0, cpu_offload: true}   # offload so it fits a 16 GB Kaggle GPU
+methods:
+  - {name: baseline}   # re-embed already measured in stage 2
+evaluation:
+  target_fpr: 1.0e-3
+  image_metrics: true

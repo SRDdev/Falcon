@@ -50,6 +50,14 @@ FOLLOWUP_POOL: dict[str, list[tuple[str, str]]] = {
         ("turn it into a watercolor painting", "watercolor painting"),
         ("make it look cinematic", "cinematic film still"),
     ],
+    # Local follow-ups (sajal/local-chains): small insertions at a fixed spot, so they apply to any image
+    # and change only a small region. Used to separate edit *type* (local vs global) from edit *count*.
+    "local_add": [
+        ("add a small red apple in the bottom left corner", "with a small red apple in the corner"),
+        ("add a small butterfly near the top", "with a small butterfly"),
+        ("add a small potted plant on the right side", "with a small potted plant"),
+        ("add a small blue ball in the bottom right corner", "with a small blue ball in the corner"),
+    ],
 }
 FOLLOWUP_ORDER = ["global_attribute", "background", "style"]  # round 2, 3, 4 (then cycles)
 
@@ -117,15 +125,22 @@ def decode_rle_mask(rle: str, h: int = 512, w: int = 512) -> np.ndarray:
 
 
 def build_plan(sample_id: str, source_caption: str, target_caption: str, instruction: str,
-               category: str, rounds: int, seed: int) -> list[EditStep]:
+               category: str, rounds: int, seed: int,
+               followup_order: list[str] | None = None) -> list[EditStep]:
     from .utils import stable_seed
 
+    order = followup_order or FOLLOWUP_ORDER  # default keeps the stage-2 prompts unchanged
     rng = np.random.default_rng(stable_seed("plan", seed, sample_id))
     plan = [EditStep(1, category, instruction, source_caption, target_caption)]
     caption = target_caption
+    used: set[tuple[str, str]] = set()
     for r in range(2, rounds + 1):
-        cat = FOLLOWUP_ORDER[(r - 2) % len(FOLLOWUP_ORDER)]
-        instr, suffix = FOLLOWUP_POOL[cat][rng.integers(len(FOLLOWUP_POOL[cat]))]
+        cat = order[(r - 2) % len(order)]
+        # draw without repeats within a chain (refill once a pool is exhausted); for the stage-2 order each
+        # category is used once in rounds 2-4, so those prompts are unchanged
+        options = [e for e in FOLLOWUP_POOL[cat] if e not in used] or FOLLOWUP_POOL[cat]
+        instr, suffix = options[rng.integers(len(options))]
+        used.add((instr, suffix))
         new_caption = f"{caption}, {suffix}"
         plan.append(EditStep(r, cat, instr, caption, new_caption))
         caption = new_caption
@@ -133,7 +148,8 @@ def build_plan(sample_id: str, source_caption: str, target_caption: str, instruc
 
 
 def load_pie_bench(cache_dir: Path, subsets: list[str] | None, per_subset: int | None,
-                   max_images: int | None, rounds: int, seed: int, skip_per_subset: int = 0) -> tuple[list[Sample], dict[str, Image.Image], dict[str, np.ndarray]]:
+                   max_images: int | None, rounds: int, seed: int, skip_per_subset: int = 0,
+                   followup_order: list[str] | None = None) -> tuple[list[Sample], dict[str, Image.Image], dict[str, np.ndarray]]:
     """Returns samples, id->image, id->edit mask. Selection is deterministic (first N per subset by id)."""
     import pandas as pd
     from huggingface_hub import hf_hub_download
@@ -156,7 +172,7 @@ def load_pie_bench(cache_dir: Path, subsets: list[str] | None, per_subset: int |
             cat = PIE_SUBSETS[sub]
             s = Sample(sid, sub, cat, row.source_prompt,
                        build_plan(sid, row.source_prompt, tgt, instruction_from_action(row.edit_action),
-                                  cat, rounds, seed), float(m.mean()))
+                                  cat, rounds, seed, followup_order), float(m.mean()))
             samples.append(s)
             images[sid] = img
             masks[sid] = m
