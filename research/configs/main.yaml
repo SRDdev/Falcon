@@ -1,0 +1,29 @@
+# Main benchmark for PECCAVI-Edit (Tables 2-6). 500 PIE-Bench++ images (first ~56 per category), 4 rounds.
+# Editors carry a `mechanism` tag (#6); held-out editors are excluded from survival-predictor training.
+# Scope fallback if compute slips (#15): --set dataset.max_images=300 and drop kontext/qwenedit.
+name: main
+seed: 42
+output_dir: experiments
+dataset:
+  name: pie_bench_pp
+  subsets: null
+  per_subset: 56
+  max_images: 500
+  rounds: 4
+watermarks:
+  - {name: none}
+  - {name: peccavi_edit, target_psnr: 40.0}
+  - {name: wam}
+  - {name: trustmark}
+  - {name: vine, variant: R}            # #7
+  - {name: robustwide}                  # #7
+editors:
+  - {name: ip2p, steps: 50, text_cfg: 7.5, image_cfg: 1.5, mechanism: instruction_sd, split: seen}
+  - {name: sdedit, steps: 50, strength: 0.5, cfg: 7.5, mechanism: noise_resample, split: seen}
+  - {name: flux2klein, steps: 4, guidance: 1.0, mechanism: rectified_flow, split: seen}
+  - {name: qwenedit, steps: 50, true_cfg: 4.0, mechanism: vlm_conditioned, split: heldout, cpu_offload: true}
+methods:
+  - {name: baseline}
+evaluation:
+  target_fpr: 1.0e-3
+  image_metrics: true

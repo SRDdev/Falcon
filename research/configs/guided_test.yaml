@@ -1,0 +1,27 @@
+# Falsification test of watermark-guided editing vs re-embedding (see analysis/PREREGISTRATION.md).
+# Guidance settings were picked on two dev images (111000000000, 311000000000), which are excluded here
+# by skip_per_subset: 1 (the first image of every category is never used).
+name: guided_test
+seed: 42
+output_dir: experiments
+dataset:
+  name: pie_bench_pp
+  subsets: null
+  skip_per_subset: 1
+  per_subset: 2
+  max_images: 18
+  rounds: 4
+watermarks:
+  - {name: none}
+  - {name: wam}
+  - {name: trustmark}
+editors:
+  - {name: ip2p, steps: 50, text_cfg: 7.5, image_cfg: 1.5}
+methods:
+  - {name: baseline}
+  - {name: reembed}
+  - {name: guided_l005, lam: 0.005, start_frac: 0.4, every: 1, payload: decoded, keep_payload: true}
+  - {name: guided_l02, lam: 0.02, start_frac: 0.4, every: 1, payload: decoded, keep_payload: true}
+evaluation:
+  target_fpr: 1.0e-3
+  image_metrics: true

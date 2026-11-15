@@ -1,0 +1,22 @@
+| detector        | editor   |   level |   n |   false_positives |   fpr |   fpr_ci_hi |   mean_bit_acc |
+|:----------------|:---------|--------:|----:|------------------:|------:|------------:|---------------:|
+| gaussianshading | ip2p     |       0 |  45 |                 0 | 0.000 |       0.079 |          0.497 |
+| gaussianshading | ip2p     |       1 |  45 |                 0 | 0.000 |       0.079 |          0.493 |
+| gaussianshading | ip2p     |       2 |  45 |                 0 | 0.000 |       0.079 |          0.500 |
+| gaussianshading | ip2p     |       3 |  45 |                 0 | 0.000 |       0.079 |          0.497 |
+| gaussianshading | ip2p     |       4 |  45 |                 0 | 0.000 |       0.079 |          0.498 |
+| gaussianshading | sdedit   |       0 |  45 |                 0 | 0.000 |       0.079 |          0.497 |
+| gaussianshading | sdedit   |       1 |  45 |                 0 | 0.000 |       0.079 |          0.498 |
+| gaussianshading | sdedit   |       2 |  45 |                 0 | 0.000 |       0.079 |          0.499 |
+| gaussianshading | sdedit   |       3 |  45 |                 0 | 0.000 |       0.079 |          0.504 |
+| gaussianshading | sdedit   |       4 |  45 |                 0 | 0.000 |       0.079 |          0.504 |
+| treering        | ip2p     |       0 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | ip2p     |       1 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | ip2p     |       2 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | ip2p     |       3 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | ip2p     |       4 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | sdedit   |       0 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | sdedit   |       1 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | sdedit   |       2 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | sdedit   |       3 |  45 |                 0 | 0.000 |       0.079 |        nan     |
+| treering        | sdedit   |       4 |  45 |                 0 | 0.000 |       0.079 |        nan     |
