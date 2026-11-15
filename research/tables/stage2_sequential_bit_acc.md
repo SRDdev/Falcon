@@ -1,0 +1,20 @@
+| method   | editor     | watermark   |    L0 |    L1 |    L2 |    L3 |    L4 |
+|:---------|:-----------|:------------|------:|------:|------:|------:|------:|
+| baseline | flux2klein | dwtdct      | 0.962 | 0.533 | 0.507 | 0.490 | 0.512 |
+| baseline | flux2klein | trustmark   | 0.999 | 0.762 | 0.517 | 0.517 | 0.507 |
+| baseline | flux2klein | wam         | 1.000 | 0.796 | 0.510 | 0.507 | 0.501 |
+| baseline | ip2p       | dwtdct      | 0.962 | 0.551 | 0.494 | 0.497 | 0.501 |
+| baseline | ip2p       | trustmark   | 0.999 | 0.802 | 0.714 | 0.623 | 0.587 |
+| baseline | ip2p       | wam         | 1.000 | 0.790 | 0.686 | 0.623 | 0.602 |
+| baseline | sdedit     | dwtdct      | 0.962 | 0.507 | 0.502 | 0.507 | 0.494 |
+| baseline | sdedit     | trustmark   | 0.999 | 0.506 | 0.500 | 0.499 | 0.497 |
+| baseline | sdedit     | wam         | 1.000 | 0.503 | 0.502 | 0.501 | 0.500 |
+| reembed  | flux2klein | dwtdct      | 0.962 | 0.951 | 0.942 | 0.942 | 0.942 |
+| reembed  | flux2klein | trustmark   | 0.999 | 0.999 | 0.999 | 0.999 | 0.999 |
+| reembed  | flux2klein | wam         | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| reembed  | ip2p       | dwtdct      | 0.962 | 0.956 | 0.938 | 0.938 | 0.938 |
+| reembed  | ip2p       | trustmark   | 0.999 | 0.999 | 0.998 | 0.998 | 0.997 |
+| reembed  | ip2p       | wam         | 1.000 | 0.999 | 0.999 | 0.999 | 0.998 |
+| reembed  | sdedit     | dwtdct      | 0.962 | 0.961 | 0.961 | 0.961 | 0.961 |
+| reembed  | sdedit     | trustmark   | 0.999 | 0.999 | 0.998 | 0.998 | 0.997 |
+| reembed  | sdedit     | wam         | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |

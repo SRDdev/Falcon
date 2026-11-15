@@ -1,0 +1,26 @@
+| method   | editor   | watermark       |   level |   n |   edit_success |   clip_dir |   clip_t_gain |   dino |   lpips |
+|:---------|:---------|:----------------|--------:|----:|---------------:|-----------:|--------------:|-------:|--------:|
+| baseline | ip2p     | gaussianshading |       1 |  45 |          0.556 |      0.156 |         0.008 |  0.737 |   0.328 |
+| baseline | ip2p     | gaussianshading |       2 |  45 |          0.600 |      0.130 |         0.001 |  0.837 |   0.359 |
+| baseline | ip2p     | gaussianshading |       3 |  45 |          0.244 |      0.100 |        -0.015 |  0.720 |   0.402 |
+| baseline | ip2p     | gaussianshading |       4 |  45 |          0.622 |      0.075 |         0.010 |  0.944 |   0.169 |
+| baseline | ip2p     | none            |       1 |  45 |          0.667 |      0.163 |         0.006 |  0.729 |   0.321 |
+| baseline | ip2p     | none            |       2 |  45 |          0.667 |      0.133 |         0.003 |  0.832 |   0.336 |
+| baseline | ip2p     | none            |       3 |  45 |          0.444 |      0.136 |        -0.012 |  0.691 |   0.415 |
+| baseline | ip2p     | none            |       4 |  45 |          0.467 |      0.061 |         0.005 |  0.927 |   0.196 |
+| baseline | ip2p     | treering        |       1 |  45 |          0.578 |      0.159 |         0.006 |  0.704 |   0.355 |
+| baseline | ip2p     | treering        |       2 |  45 |          0.644 |      0.133 |         0.009 |  0.872 |   0.350 |
+| baseline | ip2p     | treering        |       3 |  45 |          0.356 |      0.117 |        -0.017 |  0.710 |   0.430 |
+| baseline | ip2p     | treering        |       4 |  45 |          0.667 |      0.088 |         0.006 |  0.908 |   0.186 |
+| baseline | sdedit   | gaussianshading |       1 |  45 |          0.556 |      0.073 |         0.016 |  0.839 |   0.289 |
+| baseline | sdedit   | gaussianshading |       2 |  45 |          0.689 |      0.066 |         0.015 |  0.865 |   0.313 |
+| baseline | sdedit   | gaussianshading |       3 |  45 |          0.400 |      0.014 |         0.007 |  0.868 |   0.337 |
+| baseline | sdedit   | gaussianshading |       4 |  45 |          0.644 |      0.062 |         0.018 |  0.864 |   0.356 |
+| baseline | sdedit   | none            |       1 |  45 |          0.622 |      0.079 |         0.018 |  0.824 |   0.310 |
+| baseline | sdedit   | none            |       2 |  45 |          0.667 |      0.086 |         0.015 |  0.861 |   0.331 |
+| baseline | sdedit   | none            |       3 |  45 |          0.444 |      0.019 |         0.012 |  0.873 |   0.342 |
+| baseline | sdedit   | none            |       4 |  45 |          0.511 |      0.059 |         0.010 |  0.855 |   0.349 |
+| baseline | sdedit   | treering        |       1 |  45 |          0.689 |      0.104 |         0.024 |  0.819 |   0.309 |
+| baseline | sdedit   | treering        |       2 |  45 |          0.667 |      0.081 |         0.015 |  0.840 |   0.338 |
+| baseline | sdedit   | treering        |       3 |  45 |          0.444 |      0.029 |         0.008 |  0.842 |   0.351 |
+| baseline | sdedit   | treering        |       4 |  45 |          0.600 |      0.058 |         0.016 |  0.827 |   0.374 |

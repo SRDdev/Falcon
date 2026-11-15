@@ -1,0 +1,20 @@
+| method   | editor     | watermark   |   linear_b |   linear_sse |   exp_k |   exp_sse | better      |   first_round_drop |   mean_later_drop |
+|:---------|:-----------|:------------|-----------:|-------------:|--------:|----------:|:------------|-------------------:|------------------:|
+| baseline | flux2klein | dwtdct      |      0.329 |        0.583 |   2.613 |     0.001 | exponential |              0.928 |             0.015 |
+| baseline | flux2klein | trustmark   |      0.308 |        0.213 |   0.910 |     0.032 | exponential |              0.476 |             0.170 |
+| baseline | flux2klein | wam         |      0.310 |        0.201 |   0.866 |     0.059 | exponential |              0.407 |             0.197 |
+| baseline | ip2p       | dwtdct      |      0.331 |        0.541 |   2.246 |     0.001 | exponential |              0.889 |             0.036 |
+| baseline | ip2p       | trustmark   |      0.237 |        0.051 |   0.453 |     0.002 | exponential |              0.394 |             0.144 |
+| baseline | ip2p       | wam         |      0.237 |        0.082 |   0.475 |     0.005 | exponential |              0.420 |             0.125 |
+| baseline | sdedit     | dwtdct      |      0.333 |        0.635 |   4.189 |     0.000 | exponential |              0.985 |             0.010 |
+| baseline | sdedit     | trustmark   |      0.334 |        0.646 |   4.438 |     0.000 | exponential |              0.988 |             0.006 |
+| baseline | sdedit     | wam         |      0.333 |        0.657 |   5.185 |     0.000 | exponential |              0.994 |             0.002 |
+| reembed  | flux2klein | dwtdct      |      0.014 |        0.001 |   0.014 |     0.000 | exponential |              0.025 |             0.006 |
+| reembed  | flux2klein | trustmark   |      0.000 |        0.000 |   0.000 |     0.000 | linear      |              0.000 |             0.000 |
+| reembed  | flux2klein | wam         |      0.000 |        0.000 |   0.000 |     0.000 | linear      |              0.000 |             0.000 |
+| reembed  | ip2p       | dwtdct      |      0.016 |        0.001 |   0.016 |     0.001 | exponential |              0.014 |             0.013 |
+| reembed  | ip2p       | trustmark   |      0.001 |        0.000 |   0.001 |     0.000 | linear      |              0.000 |             0.001 |
+| reembed  | ip2p       | wam         |      0.001 |        0.000 |   0.001 |     0.000 | linear      |              0.001 |             0.001 |
+| reembed  | sdedit     | dwtdct      |      0.001 |        0.000 |   0.001 |     0.000 | exponential |              0.002 |             0.000 |
+| reembed  | sdedit     | trustmark   |      0.001 |        0.000 |   0.001 |     0.000 | linear      |              0.001 |             0.001 |
+| reembed  | sdedit     | wam         |      0.000 |        0.000 |   0.000 |     0.000 | linear      |              0.000 |             0.000 |
