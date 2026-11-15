@@ -1,0 +1,14 @@
+# Failure-mode probes on the pilot images (reuses pilot's cached watermarked L0 images).
+base: pilot.yaml
+name: probes
+dataset:
+  name: pie_bench_pp
+  subsets: null
+  per_subset: 3
+  max_images: 27
+  rounds: 4
+probes:
+  ip2p_steps: 50
+  ip2p_image_cfg: [1.0, 1.5, 2.5, 4.0]
+  ip2p_steps_sweep: [10, 25]
+  sdedit_strengths: [0.1, 0.2, 0.3, 0.5, 0.7]

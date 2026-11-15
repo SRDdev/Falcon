@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Experimental images, retention results, and mathematical methods for watermark survival under sequential text-guided image editing.">
+  <title>Watermark Retention Under Image Editing | Falcon Research</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f6f2;
+      --white: #fff;
+      --ink: #172522;
+      --muted: #52625d;
+      --line: #d6dfd9;
+      --green: #146b52;
+      --green-pale: #e1efe9;
+      --blue: #2768a5;
+      --blue-pale: #e5eef7;
+      --coral: #b64b34;
+      --gold: #9b6813;
+      --gold-pale: #f6efd9;
+      --serif: Charter, Georgia, "Times New Roman", serif;
+      --sans: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper) radial-gradient(#cbd6cf 0.65px, transparent 0.65px);
+      background-size: auto, 14px 14px;
+      color: var(--ink);
+      font: 16px/1.6 var(--sans);
+    }
+    a { color: var(--green); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--coral); }
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: 12px; top: 8px; z-index: 5; padding: 8px 12px; background: var(--white); }
+    .masthead, main, footer { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .masthead { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+    .brand { font: 600 12px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .brand span { color: var(--green); }
+    nav { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; }
+    nav a { color: var(--muted); text-decoration: none; }
+    .hero { position: relative; overflow: hidden; margin-top: 26px; padding: 62px clamp(24px, 7vw, 82px) 52px; background: var(--ink); color: #f7faf7; border-radius: 6px; }
+    .hero::after { content: ""; position: absolute; width: 300px; height: 300px; right: -80px; top: -140px; border: 1px solid #507d6d; border-radius: 50%; box-shadow: 0 0 0 34px rgba(80,125,109,.12), 0 0 0 72px rgba(80,125,109,.08); pointer-events: none; }
+    .eyebrow { margin: 0 0 14px; color: #a9d8c4; font: 500 11px/1.4 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 780px; margin-bottom: 18px; font: 500 54px/1.06 var(--serif); letter-spacing: 0; }
+    .dek { max-width: 700px; margin-bottom: 25px; color: #d4dfd9; font-size: 18px; }
+    .hero-note { position: relative; z-index: 1; max-width: 700px; margin-bottom: 0; padding-left: 14px; border-left: 3px solid #e2ad4e; color: #fff; font-size: 14px; }
+    .study-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 18px 0 52px; background: var(--line); border: 1px solid var(--line); }
+    .study-item { min-height: 92px; padding: 17px 20px; background: var(--white); }
+    .study-item strong { display: block; font: 500 24px/1.2 var(--serif); }
+    .study-item span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+    section { margin: 0 0 58px; scroll-margin-top: 20px; }
+    .section-head { display: grid; grid-template-columns: 72px 1fr; gap: 18px; align-items: start; margin-bottom: 22px; }
+    .section-number { padding-top: 5px; color: var(--coral); font: 500 12px var(--mono); }
+    h2 { margin-bottom: 8px; font: 500 34px/1.12 var(--serif); letter-spacing: 0; }
+    h3 { margin-bottom: 9px; font: 500 22px/1.2 var(--serif); }
+    .intro { max-width: 760px; margin-bottom: 0; color: var(--muted); }
+    .finding { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(240px,.6fr); gap: 24px; margin: 0 0 22px 90px; }
+    .finding-copy { padding: 22px 24px; background: var(--green-pale); border-left: 3px solid var(--green); }
+    .finding-copy p:last-child { margin-bottom: 0; }
+    .finding-stat { display: grid; align-content: center; padding: 20px; background: var(--white); border: 1px solid var(--line); }
+    .finding-stat b { color: var(--coral); font: 500 37px/1 var(--serif); }
+    .finding-stat span { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .table-wrap { overflow-x: auto; margin-left: 90px; background: var(--white); border: 1px solid var(--line); }
+    table { width: 100%; min-width: 650px; border-collapse: collapse; font-size: 13px; }
+    caption { padding: 14px 16px; color: var(--muted); text-align: left; font-size: 12px; }
+    th, td { padding: 11px 13px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead th { background: #edf2ee; color: var(--muted); font: 500 10px/1.4 var(--mono); letter-spacing: .04em; text-transform: uppercase; }
+    tbody th { min-width: 130px; font-weight: 600; }
+    tbody tr:hover { background: #f8faf8; }
+    td small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; white-space: nowrap; }
+    .low { color: var(--coral); font-weight: 700; }
+    .high { color: var(--green); font-weight: 700; }
+    .note { margin: 12px 0 0 90px; color: var(--muted); font-size: 12px; }
+    .figure-wide, .figure-card { margin: 0; background: var(--white); border: 1px solid var(--line); }
+    .figure-wide { margin: 22px 0 0 90px; }
+    .figure-wide img, .figure-card img { display: block; width: 100%; height: auto; }
+    .figure-wide figcaption, .figure-card figcaption { padding: 13px 16px; color: var(--muted); font-size: 12px; }
+    .figure-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 18px 0 0 90px; }
+    .figure-label { display: block; margin-bottom: 3px; color: var(--ink); font-weight: 600; }
+    .source-note { margin: 12px 0 0 90px; padding: 12px 16px; background: var(--gold-pale); color: var(--muted); font-size: 12px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-left: 90px; }
+    .callout { padding: 20px; background: var(--blue-pale); border-top: 3px solid var(--blue); }
+    .callout.warm { background: var(--gold-pale); border-color: var(--gold); }
+    .callout p:last-child { margin-bottom: 0; }
+    .architecture { display: grid; gap: 14px; margin-left: 90px; }
+    .flow-lane { padding: 18px; background: var(--white); border: 1px solid var(--line); }
+    .flow-title { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 13px; }
+    .flow-title strong { font: 500 19px/1.2 var(--serif); }
+    .flow-title span { color: var(--muted); font: 11px/1.4 var(--mono); }
+    .flow-steps { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
+    .flow-step { position: relative; min-height: 92px; padding: 12px; background: #edf2ee; border-top: 2px solid var(--green); }
+    .flow-step:not(:last-child)::after { content: "→"; position: absolute; top: 29px; right: -17px; color: var(--coral); font: 17px var(--mono); }
+    .flow-step b { display: block; margin-bottom: 5px; font: 600 12px/1.35 var(--sans); }
+    .flow-step span { display: block; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .flow-lane.generation .flow-step { border-color: var(--blue); }
+    .equation-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin: 14px 0 0 90px; }
+    .equation-card { padding: 16px; background: var(--ink); color: #f7faf7; }
+    .equation-card h3 { margin-bottom: 9px; color: #a9d8c4; font: 500 16px/1.3 var(--serif); }
+    .equation { display: block; overflow-x: auto; color: #fff; font: 12px/1.7 var(--mono); white-space: pre-wrap; }
+    .equation-card p { margin: 9px 0 0; color: #d4dfd9; font-size: 11px; }
+    .stat-method { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin: 14px 0 0 90px; background: var(--line); border: 1px solid var(--line); }
+    .stat-method article { padding: 16px; background: var(--white); }
+    .stat-method b { display: block; margin-bottom: 5px; font: 500 16px/1.3 var(--serif); }
+    .stat-method span { color: var(--muted); font-size: 12px; }
+    .limit-list { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px 24px; margin: 0 0 0 90px; padding: 0; list-style: none; }
+    .limit-list li { padding: 12px 0 12px 16px; border-left: 2px solid var(--gold); color: var(--muted); font-size: 13px; }
+    .footer-line { display: flex; justify-content: space-between; gap: 20px; padding: 20px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    @media (max-width: 760px) {
+      .masthead, main, footer { width: min(100% - 28px,1120px); }
+      .masthead { align-items: flex-start; flex-direction: column; justify-content: center; padding: 14px 0; gap: 12px; }
+      nav { gap: 14px; }
+      .hero { margin-top: 14px; padding: 42px 24px 32px; }
+      h1 { max-width: 560px; font-size: 40px; }
+      .dek { font-size: 16px; }
+      .study-strip { grid-template-columns: 1fr; margin-bottom: 40px; }
+      .study-item { min-height: 0; }
+      .section-head { grid-template-columns: 38px 1fr; gap: 10px; }
+      h2 { font-size: 29px; }
+      .finding, .table-wrap, .note, .two-col, .architecture, .figure-wide, .figure-pair, .source-note, .equation-grid, .stat-method, .limit-list { margin-left: 48px; }
+      .finding { grid-template-columns: 1fr; gap: 10px; }
+      .figure-pair, .two-col, .equation-grid, .stat-method, .limit-list { grid-template-columns: 1fr; }
+      .flow-steps { grid-template-columns: 1fr; gap: 16px; }
+      .flow-step:not(:last-child)::after { content: "↓"; top: auto; right: 12px; bottom: -18px; }
+      .flow-title { flex-direction: column; }
+      .footer-line { flex-direction: column; gap: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to results</a>
+  <header class="masthead">
+    <div class="brand">Falcon <span>/</span> Watermark study</div>
+    <nav aria-label="Page sections">
+      <a href="#visuals">Image evidence</a>
+      <a href="#posthoc">Post-hoc results</a>
+      <a href="#guided">Guided editing</a>
+      <a href="#generated">Generated images</a>
+      <a href="#architecture">System + math</a>
+    </nav>
+  </header>
+  <main id="main">
+    <div class="hero">
+      <p class="eyebrow">Measured outcomes / sequential image editing</p>
+      <h1>Repeated edits erase most post-hoc watermarks.</h1>
+      <p class="dek">Across InstructPix2Pix, SDEdit, and FLUX.2-klein, ordinary text-guided editing sharply reduced detection of marks added after image generation. Re-embedding the decoded payload largely preserved detection.</p>
+      <p class="hero-note">A separate generation-time track shows a different pattern: Gaussian Shading remained detectable through InstructPix2Pix edits, while Tree-Ring did not.</p>
+    </div>
+    <div class="study-strip" aria-label="Study sample sizes">
+      <div class="study-item"><strong>90 images</strong><span>Post-hoc watermark study / 3 editors</span></div>
+      <div class="study-item"><strong>18 held-out images</strong><span>Guided-editing validation / InstructPix2Pix</span></div>
+      <div class="study-item"><strong>45 generated images</strong><span>Generation-time watermark study</span></div>
+    </div>
+
+    <section id="visuals">
+      <div class="section-head"><div class="section-number">01 / IMAGES</div><div><h2>What the edit sequence looks like</h2><p class="intro">These are saved outputs from the completed stage-2 experiment, not stock illustrations. In each qualitative panel, the upper rows are plain editing and the lower rows decode and re-embed the payload after each edit.</p></div></div>
+      <figure class="figure-wide">
+        <img src="assets/stage2_fig2_retention_det_rate.png" width="1304" height="460" alt="Detection-rate curves across four sequential edits for FLUX.2-klein, InstructPix2Pix, and SDEdit, with 95 percent confidence intervals, from 90 images.">
+        <figcaption><span class="figure-label">Aggregate view / stage 2</span>Detection rate at each round. Shading shows 95% Wilson intervals. The plot summarizes all 90 source images per editor.</figcaption>
+      </figure>
+      <div class="figure-pair">
+        <figure class="figure-card"><img src="assets/stage2_fig7_qualitative_wam_ip2p.png" width="1193" height="1549" loading="lazy" alt="WAM examples from original through four InstructPix2Pix edits, comparing baseline and re-embedding rows; detection outcomes appear above each image."><figcaption><span class="figure-label">WAM / InstructPix2Pix</span>Columns are L0-L4. Paired rows compare plain editing with decode-edit-re-embed.</figcaption></figure>
+        <figure class="figure-card"><img src="assets/stage2_fig7_qualitative_trustmark_ip2p.png" width="1193" height="1549" loading="lazy" alt="TrustMark examples from original through four InstructPix2Pix edits, comparing baseline and re-embedding rows; detection outcomes appear above each image."><figcaption><span class="figure-label">TrustMark / InstructPix2Pix</span>Individual examples illustrate outcomes; aggregate tables below report the full study.</figcaption></figure>
+      </div>
+      <p class="source-note">Image provenance: selected image IDs and edited outputs from the stage-2 PIE-Bench++ experiment assets. Prompts and per-round detector scores are stored with the experiment results. The examples are illustrative, not a substitute for aggregate statistics.</p>
+    </section>
+
+    <section id="posthoc">
+      <div class="section-head"><div class="section-number">02 / CORE</div><div><h2>Post-hoc watermark retention</h2><p class="intro">Detection after four consecutive edits (L4), measured against the watermarked original (L0). The same 90 source images were evaluated with each editor and watermark.</p></div></div>
+      <div class="finding"><div class="finding-copy"><h3>Plain editing pushed detection close to chance.</h3><p>After four InstructPix2Pix edits, WAM remained detectable on 19% of images and TrustMark on 23%. SDEdit at strength 0.5 reduced all three post-hoc detectors to 0% at L4. FLUX.2-klein left 0% WAM and DWT-DCT-SVD detections and 2% TrustMark detections.</p></div><div class="finding-stat"><b>0-23%</b><span>Baseline L4 detection across three post-hoc methods and editors</span></div></div>
+      <div class="table-wrap"><table>
+        <caption>L4 detection rate. Values are percentages; parentheses give 95% Wilson confidence intervals, n=90 per cell.</caption>
+        <thead><tr><th scope="col" rowspan="2">Watermark</th><th scope="colgroup" colspan="3">Plain edit</th><th scope="colgroup" colspan="3">Decode, edit, re-embed</th></tr><tr><th scope="col">InstructPix2Pix</th><th scope="col">SDEdit</th><th scope="col">FLUX.2-klein</th><th scope="col">InstructPix2Pix</th><th scope="col">SDEdit</th><th scope="col">FLUX.2-klein</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">WAM</th><td class="low">18.9%<small>12.1-28.2</small></td><td class="low">0%<small>0-4.1</small></td><td class="low">0%<small>0-4.1</small></td><td class="high">100%<small>95.9-100</small></td><td class="high">100%<small>95.9-100</small></td><td class="high">100%<small>95.9-100</small></td></tr>
+          <tr><th scope="row">TrustMark</th><td class="low">23.3%<small>15.8-33.1</small></td><td class="low">0%<small>0-4.1</small></td><td class="low">2.2%<small>0.6-7.7</small></td><td class="high">100%<small>95.9-100</small></td><td class="high">100%<small>95.9-100</small></td><td class="high">100%<small>95.9-100</small></td></tr>
+          <tr><th scope="row">DWT-DCT-SVD</th><td class="low">0%<small>0-4.1</small></td><td class="low">0%<small>0-4.1</small></td><td class="low">0%<small>0-4.1</small></td><td class="high">87.8%<small>79.4-93.0</small></td><td class="high">91.1%<small>83.4-95.4</small></td><td class="high">86.7%<small>78.1-92.2</small></td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">At L0, WAM and TrustMark were detected on 100% of images; DWT-DCT-SVD on 92.2%. Re-embedding retains nearly all starting DWT-DCT-SVD detections rather than creating a perfect starting detector.</p>
+    </section>
+
+    <section id="guided">
+      <div class="section-head"><div class="section-number">03 / VALIDATION</div><div><h2>Guided editing helps, but the held-out set is small</h2><p class="intro">On 18 held-out images, guided InstructPix2Pix variants improved L4 detection over plain editing. Re-embedding remained the strongest comparator.</p></div></div>
+      <div class="table-wrap"><table>
+        <caption>L4 detection rate for InstructPix2Pix. Values are percentages; parentheses give 95% Wilson confidence intervals, n=18 per cell.</caption>
+        <thead><tr><th scope="col">Method</th><th scope="col">WAM</th><th scope="col">TrustMark</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plain editing</th><td class="low">16.7%<small>5.8-39.2</small></td><td class="low">22.2%<small>9.0-45.2</small></td></tr>
+          <tr><th scope="row">Guided, weight 0.05</th><td>72.2%<small>49.1-87.5</small></td><td>72.2%<small>49.1-87.5</small></td></tr>
+          <tr><th scope="row">Guided, weight 0.2</th><td>77.8%<small>54.8-91.0</small></td><td>88.9%<small>67.2-96.9</small></td></tr>
+          <tr><th scope="row">Decode, edit, re-embed</th><td class="high">100%<small>82.4-100</small></td><td class="high">100%<small>82.4-100</small></td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">The n=18 estimates are imprecise; treat this as validation evidence, not a precise population estimate.</p>
+    </section>
+
+    <section id="generated">
+      <div class="section-head"><div class="section-number">04 / GENERATION</div><div><h2>Generation-time watermarks behave differently</h2><p class="intro">On 45 images generated from source captions, watermark survival depended on the generation-time method and editor.</p></div></div>
+      <div class="table-wrap"><table>
+        <caption>L4 detection rate. Values are percentages; parentheses give 95% Wilson confidence intervals, n=45 per cell.</caption>
+        <thead><tr><th scope="col">Editor</th><th scope="col">Gaussian Shading</th><th scope="col">Tree-Ring</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">InstructPix2Pix</th><td class="high">95.6%<small>85.2-98.8</small></td><td>22.2%<small>12.5-36.3</small></td></tr>
+          <tr><th scope="row">SDEdit</th><td class="low">4.4%<small>1.2-14.8</small></td><td class="low">0%<small>0-7.9</small></td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">This is separate from post-hoc watermarking: the marks are encoded in the diffusion process. The mechanisms are not directly interchangeable.</p>
+    </section>
+
+    <section id="checks">
+      <div class="section-head"><div class="section-number">05 / CHECKS</div><div><h2>Negative controls and interpretation</h2><p class="intro">No false positives were observed on the unwatermarked tracks at the study's target operating point.</p></div></div>
+      <div class="two-col"><article class="callout"><h3>False-positive checks</h3><p>Zero false positives per detector: 1,350 negative rows in stage 2, 90 in the guided test, and 450 per detector in the generated-image track.</p></article><article class="callout warm"><h3>Interpretation</h3><p>Diffusion-based regeneration is destructive to many post-hoc marks. Decoding and re-embedding after an edit preserved detection more consistently than plain or guided editing.</p></article></div>
+    </section>
+
+    <section id="architecture">
+      <div class="section-head"><div class="section-number">06 / SYSTEM</div><div><h2>System flow and mathematical definitions</h2><p class="intro">The benchmark separates post-hoc marks in existing images from marks encoded during image generation.</p></div></div>
+      <div class="architecture">
+        <div class="flow-lane"><div class="flow-title"><strong>Post-hoc watermark / sequential edit</strong><span>90 source images / paired prompts and seeds</span></div><div class="flow-steps">
+          <div class="flow-step"><b>1. Source + payload</b><span>Choose image x and per-image message m; fix source ID and prompt sequence.</span></div>
+          <div class="flow-step"><b>2. Embed at L0</b><span>x0 = Embed(x,m); decode to establish initial detection.</span></div>
+          <div class="flow-step"><b>3. Edit at round r</b><span>Apply E(x[r-1], p[r], s[r]) for r=1...4 using IP2P, SDEdit, or FLUX.2-klein.</span></div>
+          <div class="flow-step"><b>4. Decode + score</b><span>Measure matched bits, detection, fidelity, and edit alignment at L0...L4.</span></div>
+        </div></div>
+        <div class="flow-lane generation"><div class="flow-title"><strong>Generation-time watermark / separate track</strong><span>45 generated images / baseline edits</span></div><div class="flow-steps">
+          <div class="flow-step"><b>1. Source caption</b><span>PIE-Bench++ caption conditions an SD-1.5 image generation.</span></div>
+          <div class="flow-step"><b>2. Watermarked sampling</b><span>Tree-Ring or Gaussian Shading encodes the mark in initial diffusion noise.</span></div>
+          <div class="flow-step"><b>3. Text-guided edits</b><span>Apply InstructPix2Pix or SDEdit sequentially.</span></div>
+          <div class="flow-step"><b>4. Detect each level</b><span>Decode at every round and compare with the unwatermarked negative track.</span></div>
+        </div></div>
+      </div>
+      <div class="equation-grid">
+        <article class="equation-card"><h3>Sequential image state</h3><code class="equation">x[0] = Embed(x, m)
+x[r] = E(x[r-1], p[r], s[r])
+              r = 1,...,4</code><p>Image IDs, prompts, and editor seeds are paired across watermark methods.</p></article>
+        <article class="equation-card"><h3>Re-embedding control</h3><code class="equation">m_hat[r] = Decode(x[r-1])
+x[r] = Embed(E(x[r-1], p[r], s[r]), m_hat[r])</code><p>The ground-truth payload is not passed to the editor; decoder errors can propagate.</p></article>
+        <article class="equation-card"><h3>Detection at target FPR</h3><code class="equation">X ~ Binomial(k, 1/2)
+detect = 1[P(X >= b) <= 10^-3]</code><p>b is the number of matching bits. k=32 for WAM/DWT-DCT-SVD and k=100 for TrustMark.</p></article>
+        <article class="equation-card"><h3>Edit success and retention</h3><code class="equation">edit_success = 1[clip_dir > 0 AND clip_t_gain > 0]
+R[r] = (1/N) SUM_i detect(i,r)</code><p>R[r] is the detected fraction at level r. Edit quality and watermark survival are reported separately.</p></article>
+        <article class="equation-card"><h3>Watermark guidance</h3><code class="equation">x_hat0 = z_t - sigma_t * epsilon_hat
+L_wm = BCE(D(VAE_dec(x_hat0)), m_hat)
+z_t <- z_t - lambda * g / RMS(g)</code><p>g = dL_wm/dx_hat0. The estimated noise is held fixed during the guidance update.</p></article>
+        <article class="equation-card"><h3>Retention decay</h3><code class="equation">e(L) = (acc(L) - 0.5) / (acc(0) - 0.5)
+linear: e(L) = 1 - bL
+exponential: e(L) = exp(-qL)</code><p>One-parameter fits summarize excess bit-accuracy decay across edit levels.</p></article>
+      </div>
+      <div class="stat-method"><article><b>Paired tests</b><span>Wilcoxon for continuous outcomes; McNemar for paired binary detection outcomes.</span></article><article><b>Uncertainty</b><span>95% Wilson intervals for detection; percentile bootstrap over 10,000 image resamples for continuous metrics.</span></article><article><b>Multiplicity</b><span>Holm correction across the editor by watermark by level family.</span></article></div>
+      <p class="note">Guidance was tested only for WAM and TrustMark, which expose differentiable decoders. The forgery probe checks whether the same process can introduce a detectable payload on clean input.</p>
+    </section>
+
+    <section id="limits">
+      <div class="section-head"><div class="section-number">07 / LIMITS</div><div><h2>Limitations</h2><p class="intro">These results characterize the tested watermark implementations, editors, settings, and image sets.</p></div></div>
+      <ul class="limit-list"><li>The guided-editing validation uses 18 held-out images, so intervals are wide.</li><li>Detection rates are not universal robustness guarantees; thresholds and edit settings matter.</li><li>Generation-time and post-hoc marks are different mechanisms and are reported separately.</li><li>Re-embedding assumes encoder and decoder access to recover and reinsert the payload.</li></ul>
+    </section>
+  </main>
+  <footer class="masthead footer-line"><span>Falcon research / watermark retention</span><span>Completed experiment results / 2026</span></footer>
+</body>
+</html>

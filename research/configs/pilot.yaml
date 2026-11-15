@@ -1,0 +1,24 @@
+# Stage-1 smoke/pilot: validates the full pipeline end to end before any scale-up.
+name: pilot
+seed: 42
+output_dir: experiments
+dataset:
+  name: pie_bench_pp
+  subsets: null        # categories 1-9 (0_random mixes several edit types and is excluded)
+  per_subset: 2
+  max_images: 10       # round-robin across categories
+  rounds: 4
+watermarks:
+  - {name: none}       # B0 / FPR control track
+  - {name: wam}
+  - {name: trustmark}
+  - {name: dwtdct, mode: dwtDctSvd}   # dwtDct mode: only 52% detected pre-edit (see notes)
+editors:
+  - {name: ip2p, steps: 50, text_cfg: 7.5, image_cfg: 1.5}
+  - {name: sdedit, steps: 50, strength: 0.5, cfg: 7.5}
+methods:
+  - {name: baseline}
+  - {name: reembed}
+evaluation:
+  target_fpr: 1.0e-3
+  image_metrics: true
