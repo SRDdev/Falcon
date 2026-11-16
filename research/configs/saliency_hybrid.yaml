@@ -12,7 +12,7 @@ dataset:
   rounds: 4
 watermarks:
   - {name: none}          # B0 / FPR control track
-  - {name: cs_wam, grid: [8, 8], k_fg: 8, k_bg: 24, top_k_tiles: 16, logit_temp: 2.0, trim_frac: 0.125}
+  - {name: cs_wam, grid: [8, 8], k_fg: 8, k_bg: 24, top_k_tiles: 16, logit_temp: 2.0, trim_frac: 0.125, eot_steps: 35, eot_eps: 0.0627, eot_lr: 0.008, eot_mse_weight: 40.0}
   - {name: wam}
   - {name: trustmark}
 editors:

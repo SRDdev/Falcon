@@ -156,3 +156,35 @@ def test_adaptive_consensus_sparse_tiles(monkeypatch):
     bit_acc = float((decoded_bits == gt_bits).mean())
     assert bit_acc == 1.0, f"CS-WAM decoded with bit accuracy {bit_acc:.2%}, expected 100%"
 
+
+def test_eot_embed_optimization_respects_eps(monkeypatch):
+    """Verify EOT optimization runs cleanly, updates perturbation, and respects L-inf eps bound."""
+    import torch
+    import torch.nn as nn
+    from wmedit.watermarks import ConsensusSaliencyWAM, WAM
+
+    monkeypatch.setattr(WAM, "__init__", lambda self, *args, **kwargs: None)
+    cswam = ConsensusSaliencyWAM(eot_steps=4, eot_eps=0.05, use_vae_eot=False)
+    cswam.device = torch.device("cpu")
+
+    class DummyModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.proj = nn.Conv2d(3, 33, kernel_size=1)
+
+        def detect(self, x):
+            return {"preds": self.proj(x)}
+
+    cswam.model = DummyModel()
+    monkeypatch.setattr(WAM, "embed", lambda self, img, bits: img)
+
+    img = Image.fromarray(np.full((64, 64, 3), 128, dtype=np.uint8))
+    bits = np.ones(32, dtype=np.uint8)
+    out = cswam.embed(img, bits)
+
+    assert out.size == (64, 64)
+    diff = np.abs(np.asarray(out, dtype=np.float32) - 128.0) / 255.0
+    assert diff.max() <= 0.05 + 1.0 / 255.0
+    assert diff.max() > 0.0
+
+

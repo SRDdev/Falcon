@@ -228,6 +228,11 @@ class ConsensusSaliencyWAM(WAM):
         logit_temp: float = 2.0,
         trim_frac: float = 0.125,
         saliency_backend: str = "auto",
+        eot_steps: int = 35,
+        eot_lr: float = 0.008,
+        eot_eps: float = 16.0 / 255.0,
+        eot_mse_weight: float = 40.0,
+        use_vae_eot: bool = True,
         **kwargs,
     ):
         super().__init__(ckpt_dir=ckpt_dir, device=device, scaling_w=scaling_w)
@@ -239,12 +244,90 @@ class ConsensusSaliencyWAM(WAM):
         self.logit_temp = logit_temp
         self.trim_frac = trim_frac
         self.saliency = SaliencyExtractor(backend=saliency_backend)
+        self.eot_steps = eot_steps
+        self.eot_lr = eot_lr
+        self.eot_eps = eot_eps
+        self.eot_mse_weight = eot_mse_weight
+        self.use_vae_eot = use_vae_eot
+        self._vae = None
 
-    @torch.no_grad()
+    def _get_vae(self):
+        if self._vae is not None:
+            return self._vae if self._vae is not False else None
+        if not self.use_vae_eot:
+            self._vae = False
+            return None
+        try:
+            from diffusers import AutoencoderKL
+            vae = AutoencoderKL.from_pretrained(
+                "stable-diffusion-v1-5/stable-diffusion-v1-5",
+                subfolder="vae",
+                torch_dtype=torch.float32,
+            ).to(self.device).eval()
+            for p in vae.parameters():
+                p.requires_grad_(False)
+            self._vae = vae
+            return vae
+        except Exception:
+            self._vae = False
+            return None
+
     def embed(self, img: Image.Image, bits: np.ndarray) -> Image.Image:
-        # Native end-to-end WAM neural embedding preserves the matched SAM-base carrier
-        # without introducing artificial pixel-space tile boundary distortions.
-        return super().embed(img, bits)
+        """Warm-start with WAM's neural embedder, then refine via Diffusion-Aware EOT
+        through the SD-1.5 VAE + latent noise + spatial tile dropout.
+        """
+        wm_raw = super().embed(img, bits)
+        if self.eot_steps <= 0:
+            return wm_raw
+
+        x_orig = pil_to_tensor(img, self.device)
+        x_init = pil_to_tensor(wm_raw, self.device)
+        delta = (x_init - x_orig).detach().clone().clamp(-self.eot_eps, self.eot_eps).requires_grad_(True)
+        opt = torch.optim.Adam([delta], lr=self.eot_lr)
+
+        target = torch.as_tensor(bits, dtype=torch.float32, device=self.device).view(1, self.nbits, 1, 1)
+        target_pm = target * 2.0 - 1.0
+        vae = self._get_vae()
+
+        for step in range(self.eot_steps):
+            x_wm = (x_orig + delta).clamp(0.0, 1.0)
+
+            if vae is not None and step % 4 != 0:
+                # Differentiable SD-1.5 VAE round-trip + diffusion latent noise
+                z = vae.encode(x_wm * 2.0 - 1.0).latent_dist.mean * vae.config.scaling_factor
+                noise_std = float(torch.empty(1).uniform_(0.10, 0.45).item())
+                z_noisy = z + noise_std * torch.randn_like(z)
+                x_trans = (vae.decode(z_noisy / vae.config.scaling_factor).sample * 0.5 + 0.5).clamp(0.0, 1.0)
+            else:
+                # Differentiable spatial tile dropout + pixel noise fallback
+                _, _, h, w = x_wm.shape
+                gh, gw = self.grid
+                tile_keep = (torch.rand(1, 1, gh, gw, device=self.device) > 0.25).float()
+                tile_mask = F.interpolate(tile_keep, size=(h, w), mode="nearest")
+                x_trans = (x_wm * tile_mask + x_orig * (1.0 - tile_mask) + 0.02 * torch.randn_like(x_wm)).clamp(0.0, 1.0)
+
+            preds = self.model.detect(self._norm(x_trans))["preds"]
+            mask_p = torch.sigmoid(preds[:, 0:1])
+            bit_p = preds[:, 1:]
+
+            signed_logits = bit_p * target_pm
+            bit_loss = (
+                F.binary_cross_entropy_with_logits(bit_p, target.expand_as(bit_p))
+                + 0.25 * F.relu(3.5 - signed_logits).mean()
+            )
+            mask_loss = F.relu(0.70 - mask_p).mean()
+            mse_loss = F.mse_loss(x_wm, x_orig)
+            loss = bit_loss + 0.5 * mask_loss + self.eot_mse_weight * mse_loss
+
+            opt.zero_grad()
+            loss.backward()
+            opt.step()
+            with torch.no_grad():
+                delta.clamp_(-self.eot_eps, self.eot_eps)
+
+        with torch.no_grad():
+            x_final = (x_orig + delta).clamp(0.0, 1.0)
+        return tensor_to_pil(x_final)
 
     @torch.no_grad()
     def decode(self, img: Image.Image) -> np.ndarray:
