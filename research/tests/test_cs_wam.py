@@ -119,3 +119,40 @@ def test_two_stage_consensus_rejects_diffusion_scrambled_tiles(monkeypatch):
 
     bit_acc = float((decoded_bits == gt_bits).mean())
     assert bit_acc == 1.0, f"CS-WAM decoded with bit accuracy {bit_acc:.2%}, expected 100%"
+
+
+def test_adaptive_consensus_sparse_tiles(monkeypatch):
+    """Simulate severe Round 4 degradation: only 6 clean tiles survive out of 64."""
+    import torch
+    from wmedit.watermarks import ConsensusSaliencyWAM, WAM
+
+    monkeypatch.setattr(WAM, "__init__", lambda self, *args, **kwargs: None)
+    cswam = ConsensusSaliencyWAM(logit_temp=2.0, top_k_tiles=16, trim_frac=0.125)
+
+    gt_bits = np.ones(32, dtype=np.uint8)
+    torch.manual_seed(123)
+
+    bitp = torch.zeros(1, 32, 512, 512)
+    mask = torch.ones(1, 1, 512, 512) * 0.8
+
+    from wmedit.erasure import grid_boxes
+    boxes = grid_boxes(512, 512, 8, 8)
+
+    # Only 6 tiles are clean
+    for i in range(6):
+        y0, x0, y1, x1 = boxes[i]
+        bitp[0, :, y0:y1, x0:x1] = 1.8 + 0.3 * torch.randn(32, y1 - y0, x1 - x0)
+
+    # 58 tiles are heavily edited
+    for i in range(6, 64):
+        y0, x0, y1, x1 = boxes[i]
+        random_signs = torch.randint(0, 2, (32, 1, 1)).float() * 2 - 1
+        bitp[0, :, y0:y1, x0:x1] = random_signs * (5.0 + 3.0 * torch.rand(32, y1 - y0, x1 - x0))
+
+    cswam.detect_raw = lambda img: (mask, bitp)
+    dummy_img = Image.new("RGB", (512, 512))
+    decoded_bits = cswam.decode(dummy_img)
+
+    bit_acc = float((decoded_bits == gt_bits).mean())
+    assert bit_acc == 1.0, f"CS-WAM decoded with bit accuracy {bit_acc:.2%}, expected 100%"
+
