@@ -242,16 +242,9 @@ class ConsensusSaliencyWAM(WAM):
 
     @torch.no_grad()
     def embed(self, img: Image.Image, bits: np.ndarray) -> Image.Image:
-        from .saliency import dual_zone_tile_weights
-        wm_raw = super().embed(img, bits)
-        orig = np.asarray(img.convert("RGB"), dtype=np.float32)
-        resid = np.asarray(wm_raw, dtype=np.float32) - orig
-        # Non-starving JND modulation: retains 100% native WAM frequency profile
-        w_map, _ = dual_zone_tile_weights(
-            img, grid=self.grid, k_fg=self.k_fg, k_bg=self.k_bg, extractor=self.saliency,
-        )
-        out = np.clip(orig + resid * w_map[..., None], 0, 255).round().astype(np.uint8)
-        return Image.fromarray(out)
+        # Native end-to-end WAM neural embedding preserves the matched SAM-base carrier
+        # without introducing artificial pixel-space tile boundary distortions.
+        return super().embed(img, bits)
 
     @torch.no_grad()
     def decode(self, img: Image.Image) -> np.ndarray:
