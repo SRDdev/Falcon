@@ -199,7 +199,93 @@ class DWTDCT(Watermark):
         return np.array(self._dec("bits", self.nbits).decode(bgr, self.mode), dtype=np.uint8)
 
 
-REGISTRY = {"wam": WAM, "trustmark": TrustMarkWM, "dwtdct": DWTDCT}
+class SaliencyWAM(WAM):
+    """WAM enhanced with 64x64 dual-zone saliency modulation, FFT mid-band locking, and tile-voted decoding."""
+    name = "wam_saliency"
+    nbits = 32
+    differentiable = True
+
+    def __init__(
+        self,
+        ckpt_dir: str | None = None,
+        device=None,
+        scaling_w: float | None = None,
+        grid: tuple[int, int] = (8, 8),
+        k_fg: int = 4,
+        k_bg: int = 12,
+        top_k_tiles: int = 16,
+        spectral_blend: float = 0.35,
+        band: tuple[float, float] = (3.0, 16.0),
+        saliency_backend: str = "auto",
+    ):
+        super().__init__(ckpt_dir=ckpt_dir, device=device, scaling_w=scaling_w)
+        from .saliency import SaliencyExtractor
+        self.grid = grid
+        self.k_fg = k_fg
+        self.k_bg = k_bg
+        self.top_k_tiles = top_k_tiles
+        self.spectral_blend = spectral_blend
+        self.band = band
+        self.saliency = SaliencyExtractor(backend=saliency_backend)
+
+    def _bandpass_tiles(self, resid: np.ndarray) -> np.ndarray:
+        """Apply 2D FFT bandpass filtering per 64x64 tile to concentrate energy in VAE-resilient mid-bands."""
+        from .erasure import grid_boxes
+        h, w = resid.shape[:2]
+        out = np.zeros_like(resid)
+        for y0, x0, y1, x1 in grid_boxes(h, w, *self.grid):
+            th, tw = y1 - y0, x1 - x0
+            fy = np.fft.fftfreq(th)[:, None] * th
+            fx = np.fft.fftfreq(tw)[None, :] * tw
+            r = np.sqrt(fy * fy + fx * fx)
+            mask = ((r >= self.band[0]) & (r <= self.band[1])).astype(np.float32)
+            for c in range(resid.shape[2]):
+                patch = resid[y0:y1, x0:x1, c]
+                bp = np.real(np.fft.ifft2(np.fft.fft2(patch) * mask))
+                out[y0:y1, x0:x1, c] = bp
+        return out
+
+    @torch.no_grad()
+    def embed(self, img: Image.Image, bits: np.ndarray) -> Image.Image:
+        from .saliency import dual_zone_tile_weights
+        wm_raw = super().embed(img, bits)
+        orig = np.asarray(img.convert("RGB"), dtype=np.float32)
+        resid = np.asarray(wm_raw, dtype=np.float32) - orig
+        if self.spectral_blend > 0:
+            bp = self._bandpass_tiles(resid)
+            bp_norm = np.sqrt(np.mean(resid ** 2) / (np.mean(bp ** 2) + 1e-12))
+            resid = (1.0 - self.spectral_blend) * resid + self.spectral_blend * (bp * bp_norm)
+        w_map, _ = dual_zone_tile_weights(
+            img, grid=self.grid, k_fg=self.k_fg, k_bg=self.k_bg, extractor=self.saliency,
+        )
+        out = np.clip(orig + resid * w_map[..., None], 0, 255).round().astype(np.uint8)
+        return Image.fromarray(out)
+
+    @torch.no_grad()
+    def decode(self, img: Image.Image) -> np.ndarray:
+        from .erasure import grid_boxes
+        mask, bitp = self.detect_raw(img)
+        _, _, h, w = bitp.shape
+        boxes = grid_boxes(h, w, *self.grid)
+        tile_conf = []
+        tile_logits = []
+        for y0, x0, y1, x1 in boxes:
+            m_tile = mask[0, 0, y0:y1, x0:x1]
+            b_tile = bitp[0, :, y0:y1, x0:x1]
+            conf = float(m_tile.mean() * b_tile.abs().mean())
+            # Mask-weighted bit logits inside this 64x64 tile
+            logit = (b_tile * m_tile).sum((1, 2)) / m_tile.sum().clamp_min(1e-6)
+            tile_conf.append(conf)
+            tile_logits.append(logit)
+        order = np.argsort(-np.array(tile_conf))[: min(self.top_k_tiles, len(boxes))]
+        weights = torch.tensor([tile_conf[i] for i in order], device=bitp.device, dtype=bitp.dtype)
+        weights = weights / weights.sum().clamp_min(1e-8)
+        stacked = torch.stack([tile_logits[i] for i in order], dim=0)
+        agg = (stacked * weights[:, None]).sum(dim=0)
+        return (agg > 0).cpu().numpy().astype(np.uint8)
+
+
+REGISTRY = {"wam": WAM, "wam_saliency": SaliencyWAM, "trustmark": TrustMarkWM, "dwtdct": DWTDCT}
 
 
 def build_watermark(name: str, **kwargs) -> Watermark:
@@ -207,6 +293,10 @@ def build_watermark(name: str, **kwargs) -> Watermark:
         from .peccavi_edit import PeccaviEdit
 
         return PeccaviEdit(**kwargs)
+    if name == "peccavi_hybrid":  # numpy-only module, kept torch-free
+        from .peccavi_edit import PeccaviHybrid
+
+        return PeccaviHybrid(**kwargs)
     return REGISTRY[name](**kwargs)
 
 

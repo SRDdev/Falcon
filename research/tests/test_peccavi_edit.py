@@ -70,3 +70,53 @@ def test_survival_scores_select_failure_diverse_carriers():
     scores = np.linspace(0.2, 1.0, 36)
     boxes = wm.select(512, 512, scores)
     assert len(boxes) == 16 and len({tuple(b) for b in boxes}) == 16
+
+
+def test_saliency_64x64_bucketed_partition():
+    from wmedit.saliency import bucketed_tile_selection, dual_zone_tile_weights
+
+    img = natural_like(4)
+    sel = bucketed_tile_selection(img, grid=(8, 8), bucket_shape=(2, 2), fg_buckets=4)
+    assert sel["boxes"].shape == (64, 4)
+    assert sel["chosen_boxes"].shape == (16, 4)
+    assert sel["zone_labels"].count("fg") == 4
+    assert sel["zone_labels"].count("bg") == 12
+    w_map, weights = dual_zone_tile_weights(img, grid=(8, 8), k_fg=4, k_bg=12)
+    assert w_map.shape == (512, 512) and len(weights) == 64
+
+
+def test_peccavi_hybrid_roundtrip_and_fg_bg_wipeout_survival():
+    from wmedit.peccavi_edit import PeccaviHybrid
+    from wmedit.watermarks import build_watermark
+
+    wm = build_watermark("peccavi_hybrid", target_psnr=40.0)
+    assert isinstance(wm, PeccaviHybrid)
+    img = natural_like(5)
+    msg = b"\xde\xad\xbe\xef\xca\xfe"
+    w, boxes = wm.embed(img, msg, return_boxes=True)
+
+    # Check PSNR >= 39.5 dB
+    a, b = np.asarray(img, float), np.asarray(w, float)
+    psnr = 10 * np.log10(255 ** 2 / np.mean((a - b) ** 2))
+    assert psnr > 39.5
+
+    # Clean round-trip & FPR checks
+    s = wm.score(w, msg)
+    assert s["detected"] and s["exact_payload"]
+    assert wm.detect(img)["message"] is None
+    assert PeccaviHybrid(key=b"wrong-key").detect(w)["message"] is None
+
+    # Simulate foreground object replacement (destroy central 256x256 region)
+    arr_fg = np.asarray(w).copy()
+    rng = np.random.default_rng(7)
+    arr_fg[128:384, 128:384] = rng.integers(0, 256, (256, 256, 3))
+    det_fg = wm.detect(Image.fromarray(arr_fg.astype(np.uint8)))
+    assert det_fg["message"] == msg
+
+    # Simulate partial background wipeout (destroy 6 outer tiles)
+    arr_bg = np.asarray(w).copy()
+    for y0, x0, y1, x1 in boxes[:6]:
+        arr_bg[y0:y1, x0:x1] = rng.integers(0, 256, (y1 - y0, x1 - x0, 3))
+    det_bg = wm.detect(Image.fromarray(arr_bg.astype(np.uint8)))
+    assert det_bg["message"] == msg
+

@@ -180,3 +180,129 @@ class PeccaviEdit:
         return {"bit_acc": matches / self.n_coded_bits, "matches": matches, "n_coded_bits": self.n_coded_bits, "detected": det["message"] == bytes(message),
                 "tag_verified": det["message"] is not None, "n_erased": det["n_erased"],
                 "exact_payload": det["message"] == bytes(message), "eta_mean": float(det["eta"].mean())}
+
+
+class PeccaviHybrid(PeccaviEdit):
+    """Option 3: 64x64 dual-zone saliency-bucketed Fourier RS(16,8) embedder and blind detector.
+
+    Partitions the image into an 8x8 grid of 64x64 tiles grouped into 16 spatial buckets (2x2 tiles each).
+    During embedding, fast saliency (TinyHD / Spectral Residual) + texture scoring picks 4 foreground-anchor
+    buckets and 12 background-anchor buckets, embedding one RS-coded byte per bucket.
+    During blind detection, each bucket scans its 4 candidate 64x64 tiles and selects the one with peak
+    matched-filter SNR eta, requiring neither the original image nor the pre-edit saliency map.
+    """
+    name = "peccavi_hybrid"
+
+    def __init__(
+        self,
+        key: bytes = b"peccavi-hybrid-key",
+        k: int = 16,
+        r: int = 8,
+        tag_bytes: int = 2,
+        grid: tuple[int, int] = (8, 8),
+        bucket_shape: tuple[int, int] = (2, 2),
+        fg_buckets: int = 4,
+        band: tuple[float, float] = (3.0, 14.0),
+        target_psnr: float = 40.0,
+        hp_sigma: float = 1.8,
+        tau_e: float = 1.15,
+        search: int = 4,
+        search_step: int = 1,
+        strength_gamma: float = 1.0,
+        alpha_range: tuple[float, float] = (0.6, 1.8),
+        whiten: int = 11,
+        saliency_backend: str = "auto",
+    ):
+        super().__init__(
+            key=key, k=k, r=r, tag_bytes=tag_bytes, grid=grid, band=band,
+            target_psnr=target_psnr, hp_sigma=hp_sigma, tau_e=tau_e,
+            search=search, search_step=search_step, strength_gamma=strength_gamma,
+            alpha_range=alpha_range, whiten=whiten,
+        )
+        self.bucket_shape = bucket_shape
+        self.fg_buckets = fg_buckets
+        from .saliency import SaliencyExtractor
+        self.saliency = SaliencyExtractor(backend=saliency_backend)
+
+    def _bucket_members(self) -> list[list[int]]:
+        rows, cols = self.grid
+        br, bc = self.bucket_shape
+        b_rows, b_cols = rows // br, cols // bc
+        return [
+            [(bi * br + dr) * cols + (bj * bc + dc) for dr in range(br) for dc in range(bc)]
+            for bi in range(b_rows)
+            for bj in range(b_cols)
+        ]
+
+    def embed(self, img: Image.Image, message: bytes | np.ndarray, scores: np.ndarray | None = None,
+              cov: np.ndarray | None = None, return_boxes: bool = False):
+        from .saliency import bucketed_tile_selection
+
+        if not isinstance(message, (bytes, bytearray)):
+            message = np.packbits(np.asarray(message, dtype=np.uint8)).tobytes()
+        x = np.asarray(img.convert("RGB"), dtype=np.float32)
+        y = x @ LUMA
+        sel = bucketed_tile_selection(
+            img, grid=self.grid, bucket_shape=self.bucket_shape,
+            fg_buckets=self.fg_buckets, extractor=self.saliency,
+        )
+        chosen_idx = sel["chosen_idx"]
+        boxes = sel["chosen_boxes"]
+        symbols = self.code.encode(bytes(message), self.key)
+
+        # Slightly boost background anchors relative to foreground anchors if desired, bounded by alpha_range
+        zone_w = np.array([0.85 if z == "fg" else 1.15 for z in sel["zone_labels"]], dtype=np.float32)
+        alpha = np.clip(zone_w ** self.gamma / np.mean(zone_w ** self.gamma), *self.alpha_range)
+
+        resid = np.zeros_like(y)
+        for j, (y0, x0, y1, x1) in enumerate(boxes):
+            tile_id = int(chosen_idx[j])
+            tpl = self.templates((j, tile_id), y1 - y0, x1 - x0)
+            bits = np.unpackbits(np.array([symbols[j]], dtype=np.uint8)).astype(np.float32)
+            pat = ((2 * bits - 1)[:, None, None] * tpl).sum(0)
+            resid[y0:y1, x0:x1] += alpha[j] * pat * texture_mask(y[y0:y1, x0:x1])
+
+        mse_target = 255.0 ** 2 / 10 ** (self.target_psnr / 10)
+        scale = np.sqrt(mse_target / (np.mean(resid ** 2) + 1e-12))
+        out = np.clip(x + (scale * resid)[..., None], 0, 255)
+        wm = Image.fromarray(out.round().astype(np.uint8))
+        return (wm, boxes) if return_boxes else wm
+
+    def detect(self, img: Image.Image, boxes: np.ndarray | None = None) -> dict:
+        x = np.asarray(img.convert("RGB"), dtype=np.float32)
+        yhp = highpass(x @ LUMA, self.hp_sigma)
+        if self.whiten:
+            yhp = yhp / (np.sqrt(np.clip(uniform_filter(yhp * yhp, self.whiten), 0, None)) + 1.0)
+        h, w = yhp.shape
+        all_boxes = self.candidate_boxes(h, w)
+        buckets = self._bucket_members()
+
+        symbols, eta, hard_bits, chosen_tiles = [], [], [], []
+        for j, members in enumerate(buckets):
+            best_eta = -1.0
+            best_bits = None
+            best_tile = members[0]
+            for tile_id in members:
+                box = all_boxes[tile_id]
+                tpl = self.templates((j, tile_id), box[2] - box[0], box[3] - box[1])
+                L = self._corr(yhp, box, tpl)
+                e = float(np.abs(L).mean()) * np.sqrt(tpl[0].size) / 4.0
+                if e > best_eta:
+                    best_eta = e
+                    best_bits = (L > 0).astype(np.uint8)
+                    best_tile = tile_id
+            eta.append(best_eta)
+            hard_bits.append(best_bits)
+            chosen_tiles.append(best_tile)
+            symbols.append(None if best_eta < self.tau_e else int(np.packbits(best_bits)[0]))
+
+        msg = self.code.decode(symbols, self.key)
+        return {
+            "message": msg,
+            "symbols": symbols,
+            "eta": np.array(eta),
+            "coded_bits": np.concatenate(hard_bits),
+            "n_erased": sum(s is None for s in symbols),
+            "chosen_tiles": chosen_tiles,
+        }
+
