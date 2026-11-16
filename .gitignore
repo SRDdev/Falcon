@@ -3,3 +3,4 @@ research/experiments/**/images/
 research/archive/**/images/
 research/**/__pycache__/
 research/.DS_Store
+.agents/

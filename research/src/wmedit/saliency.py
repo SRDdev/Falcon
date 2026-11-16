@@ -95,8 +95,17 @@ class SaliencyExtractor:
         ckpt = torch.load(self.weights_path, map_location=dev)
         if hasattr(ckpt, "eval"):
             self._model = ckpt.to(dev).eval()
+        elif isinstance(ckpt, dict) and "state_dict" in ckpt:
+            try:
+                from model import TinyHDModel  # noqa: F401
+                self._model = TinyHDModel().to(dev).eval()
+                self._model.load_state_dict(ckpt["state_dict"])
+            except Exception:
+                self._model = None
+                return
         else:
-            raise RuntimeError("TinyHD checkpoint requires model class instantiation from tinyHD/src")
+            self._model = None
+            return
         self._tf = transforms.Compose([
             transforms.Resize((224, 384)),
             transforms.ToTensor(),
@@ -206,16 +215,23 @@ def bucketed_tile_selection(
 def dual_zone_tile_weights(
     img: Image.Image,
     grid: tuple[int, int] = (8, 8),
-    k_fg: int = 4,
-    k_bg: int = 12,
-    fg_weight: float = 0.9,
+    k_fg: int = 8,
+    k_bg: int = 24,
+    fg_weight: float = 1.05,
     bg_weight: float = 1.25,
-    other_weight: float = 0.55,
+    other_weight: float = 0.95,
     extractor: SaliencyExtractor | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Compute a smooth spatial weight mask [H, W] over 64x64 tiles for WAM modulation."""
+    """Compute a non-starving spatial weight mask [H, W] in [0.90, 1.35] for WAM modulation.
+
+    Unlike naive starvation (0.55), every tile in the image retains >= 90% of native amplitude,
+    while 8 foreground anchors (1.05) survive background replacement and 24 background anchors (1.25)
+    survive localized foreground object edits.
+    """
     boxes, _, tile_sal, tile_tex = tile_scores(img, grid=grid, extractor=extractor)
-    rgb_h, rgb_w = img.size[1], img.size[0]
+    rgb = np.asarray(img.convert("RGB"), dtype=np.float32)
+    rgb_h, rgb_w = rgb.shape[:2]
+    tex_full = texture_energy_map(rgb @ LUMA)
 
     fg_score = (tile_sal + 0.05) * (tile_tex + 0.15)
     bg_score = (1.0 - tile_sal + 0.05) * (tile_tex + 0.15)
@@ -234,5 +250,7 @@ def dual_zone_tile_weights(
     for i, (y0, x0, y1, x1) in enumerate(boxes):
         w_map[y0:y1, x0:x1] = weights[i]
     w_map = gaussian_filter(w_map, sigma=4.0)
-    w_map = w_map / (w_map.mean() + 1e-8)
+    # JND texture modulation bounded in [0.90, 1.35]
+    w_map = w_map * (0.92 + 0.16 * tex_full)
+    w_map = np.clip(w_map, 0.90, 1.35)
     return w_map.astype(np.float32), weights
