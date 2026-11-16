@@ -288,10 +288,18 @@ class ConsensusSaliencyWAM(WAM):
         u_norms = U.norm(dim=1, keepdim=True).clamp_min(1e-8)  # [N_tiles, 1]
         U_unit = U / u_norms  # [N_tiles, 32]
         C = U_unit @ U_unit.T  # [N_tiles, N_tiles] pairwise cosine similarities
+        torch.diagonal(C).fill_(0.0)  # Exclude self-similarity to measure true mutual agreement
         A = torch.clamp(C, min=0.0) ** 2  # quadratic rectified pairwise agreement
 
         # Prior-weighted centrality to identify the cluster medoid tile
         centrality = (A * P[None, :]).sum(dim=1)  # [N_tiles]
+        max_c = float(centrality.max().item())
+
+        # If mutual agreement is below random floor (< 2.5), no multi-tile consensus cluster exists
+        # -> fall back directly to WAM's global decoder (guaranteeing >= vanilla baseline performance)
+        if max_c < 2.5:
+            return super().decode(img)
+
         i_star = torch.argmax(centrality)
 
         # Step 3: Reference consensus vector and dynamic outlier rejection (Spatial Erasure)
@@ -300,17 +308,13 @@ class ConsensusSaliencyWAM(WAM):
 
         # Agreement of all tiles with cluster consensus
         cos_sim = (U_unit @ u0_norm).squeeze(-1)  # [N_tiles]
-        max_cos = float(cos_sim.max().item())
 
-        # If even the best tile has negligible agreement (< 0.15), watermark is obliterated
-        if max_cos < 0.15:
-            return super().decode(img)
-
-        # Relative adaptive thresholding: clean tiles match within 50% of the medoid peak,
-        # completely rejecting diffusion-edited tiles whose cosine with u0 is near zero.
-        thresh = max(0.20, 0.50 * max_cos)
-        agree_mask = cos_sim >= thresh
+        # Filter tiles agreeing with the consensus anchor (rejecting hostile diffusion edits)
+        agree_mask = cos_sim >= 0.25
         agree_idx = torch.where(agree_mask)[0]
+
+        if len(agree_idx) < 3:
+            return super().decode(img)
 
         w_star = P * (cos_sim.clamp_min(0.0) ** 2)
 
@@ -322,9 +326,10 @@ class ConsensusSaliencyWAM(WAM):
         W_top = w_star[top_idx]  # [k_sel]
         w_sum = W_top.sum().clamp_min(1e-8)
 
-        # Global residual anchor: gentle diffuse background prior from whole image
+        # Global residual anchor: diffuse background prior from whole image
         global_logit = (bitp * mask).sum(dim=(2, 3))[0] / mask.sum(dim=(2, 3))[0].clamp_min(1e-6)
         global_v = torch.tanh(global_logit / self.logit_temp)
+        global_u = global_v / global_v.norm().clamp_min(1e-8)
 
         # Step 4: Per-bit trimmed consensus aggregation + diffuse anchor
         n_trim = int(self.trim_frac * k_sel)
@@ -334,11 +339,11 @@ class ConsensusSaliencyWAM(WAM):
             if n_trim > 0 and k_sel > 2 * n_trim + 1:
                 sorted_idx = torch.argsort(vals)
                 keep_idx = sorted_idx[n_trim:-n_trim]
-                bit_vote = (vals[keep_idx] * W_top[keep_idx]).sum()
+                bit_vote = (vals[keep_idx] * W_top[keep_idx]).sum() / W_top[keep_idx].sum().clamp_min(1e-8)
             else:
-                bit_vote = (vals * W_top).sum()
-            # Fused vote: consensus tiles + 12% global diffuse prior
-            fused_vote = bit_vote + 0.12 * w_sum * global_v[b]
+                bit_vote = (vals * W_top).sum() / w_sum
+            # Fused vote: normalized tile consensus + 35% global diffuse prior
+            fused_vote = bit_vote + 0.35 * global_u[b]
             final_bits[b] = 1 if fused_vote > 0 else 0
 
         return final_bits
